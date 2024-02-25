@@ -1,0 +1,26 @@
+﻿<Window x:Class="FinanceManagement.CustomDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinanceManagement"
+        mc:Ignorable="d"
+        Title="CustomDialog" Height="200" Width="350" WindowStartupLocation="CenterOwner">
+    <!-- Vergrößern Sie die Breite, um Platz für alle Buttons zu schaffen -->
+    <StackPanel Margin="10">
+        <TextBlock Text="Wie möchten Sie die Daten eintragen?" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <!-- Manuell eintragen -->
+                <ColumnDefinition Width="*"/>
+                <!-- CSV eintragen -->
+                <ColumnDefinition Width="*"/>
+                <!-- Abbrechen -->
+            </Grid.ColumnDefinitions>
+            <Button Content="Manuell eintragen" x:Name="manual_btn" Grid.Column="0" Margin="0,0,5,0" Click="manual_btn_Click"/>
+            <Button Content="CSV eintragen" x:Name="viaCSV_btn" Grid.Column="1" Margin="5,0,5,0" Click="viaCSV_btn_Click"/>
+            <Button Content="Schließen" x:Name="cancle_btn" Grid.Column="2" Margin="5,0,0,0" Click="cancle_btn_Click"/>
+        </Grid>
+    </StackPanel>
+</Window>

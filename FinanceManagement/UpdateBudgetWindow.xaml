@@ -1,0 +1,75 @@
+﻿<Window x:Class="FinanceManagement.UpdateBudgetWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinanceManagement"
+        mc:Ignorable="d"
+        xmlns:userControls="clr-namespace:FinanceManagement.View.UserControls"
+        Title="Datensatz Aktualisieren" Height="500" Width="500" WindowStartupLocation="CenterOwner">
+
+    <StackPanel Orientation="Vertical" Margin="0,30,0,0">
+        <Grid Grid.Column="1" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="ID" Grid.Row="0" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Betrag" Grid.Row="1" VerticalAlignment="Center" Height="30" Margin="0,0,410,10" />
+            <Label Content="Währung" Grid.Row="2" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Limit d. Jahres" Grid.Row="3" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Kategorie" Grid.Row="4" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Erstellt am" Grid.Row="5" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Status" Grid.Row="6" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Genehm. von" Grid.Row="7" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Kommentar" Grid.Row="8" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <userControls:ClearableTextBox Grid.Row="0" Width="400" Height="30" Placeholder="ID" x:Name="BudgetID" Foreground="Black" Margin="80,0,0,10" IsEnabled="False"/>
+            <userControls:ClearableTextBox Grid.Row="1" Width="400" Height="30" Placeholder="Betrag" x:Name="Budget_Amount" Foreground="Black" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="2" Width="400" Height="30" Placeholder="Währung" x:Name="Currency" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="3" Width="400" Height="30" Placeholder="Limit des Jahres" x:Name="Year_Limit" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="4" Width="400" Height="30" Placeholder="Kategorie" x:Name="Budget_Category" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="5" Width="400" Height="30" Placeholder="Erstellt am " x:Name="Creation_Date" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="6" Width="400" Height="30" Placeholder="Status " x:Name="Budget_Status" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="7" Width="400" Height="30" Placeholder="Genehmigt von " x:Name="Approved_By" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="8" Width="400" Height="30" Placeholder="Kommentar" x:Name="Comment" Margin="80,0,0,10"/>
+            <Button Content="Aktualisieren" x:Name="updateInDB_btn"  Grid.Row="9"  Width="80" Height="30" Margin="200,10,0,20" Click="updateInDB_btn_Click"/>
+            <Button Content="Schließen" x:Name="cancel_btn"  Grid.Row="9"  Width="80" Height="30" Margin="400,10,0,20" Click="cancel_btn_Click"/>
+            <Button x:Name="previousEntry_btn"  Grid.Row="9"  Width="50" Height="30" Margin="0,0,270,10" Click="previousEntry_btn_Click">
+                <Button.Content>
+                    <TextBlock Text="←" FontSize="40" VerticalAlignment="Center" Margin="0,-10,0,0"/>
+                </Button.Content>
+            </Button>
+            <Button x:Name="nextEntry_btn"  Grid.Row="9"  Width="50" Height="30" Margin="120,10,280,20" Click="nextEntry_btn_Click">
+                <Button.Content>
+                    <TextBlock Text="→" FontSize="40" VerticalAlignment="Center" Margin="0,-10,0,0"/>
+                </Button.Content>
+            </Button>
+        </Grid>
+    </StackPanel>
+    
+
+    <!--
+        <ComboBox x:Name="ColumnSelectionComboBox" Width="200" Margin="0,0,0,10" HorizontalAlignment="Left">
+            <ComboBoxItem Content="ID" />
+            <ComboBoxItem Content="Budget" />
+             Weitere Spaltennamen hinzufügen
+        </ComboBox>
+        <userControls:ClearableTextBox x:Name="SearchValueTextBox" Width="200" Height="20" VerticalAlignment="Top"
+                                       Margin="0,-30,120,0" Placeholder="Geben sie ein was sie suchen"/>
+        <TextBox x:Name="SearchValueTextBox" Width="200" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Content="Suchen" Width="200" x:Name="SearchValuebtn" Margin="340,-40,0,0" Height="20" Click="SearchValuebtn_Click"/>
+        <DataGrid x:Name="ResultsDataGrid" AutoGenerateColumns="True" CanUserAddRows="False"
+                  Margin="0,10,0,0" IsReadOnly="False" RowEditEnding="ResultDataGrid_RowEditEnding"/>
+        -->
+    
+
+</Window>
