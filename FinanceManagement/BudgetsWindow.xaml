@@ -38,14 +38,11 @@
                 <Button Content="Budget Entfernen" Foreground="White" Background="Transparent" 
                         Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" 
                         Click="Button_Delete_BudgetWindow_Click"/>
-                <!--
-                <Button x:Name="ResetView" Foreground="White" Background="Transparent" 
-                        Padding="10" BorderThickness="0" HorizontalContentAlignment="Left"
-                        Click="Button_ResetView_Click">
+                <Button x:Name="updateBudgetBtn" Click="updateBudgetBtn_Click">
                     <Button.Content>
-                        <TextBlock Text="Ansicht zurücksetzen" TextWrapping="Wrap"/>
+                        <TextBlock Text="Budget Aktualisieren" TextWrapping="Wrap"/>
                     </Button.Content>
-                </Button>-->
+                    </Button>
 
                 <Button Content="DB neu laden" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="Button_Reload_Click"/>
                 <Button Content="Zurück" x:Name="backBtn" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="backBtn_Click"/>
@@ -59,10 +56,6 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <!-- todo : placeholder überprüfen wieso er nicht verschwindet, funktioniert bei anderem fenster 1a-->
-                    <!--<Button Content="Test" Height="23" Width="50" Margin="400,10,0,0" 
-                            VerticalAlignment="Top" Background="White" Foreground="Black"
-                            Padding="0" x:Name="TestBtn" Click="TestBtn_Click"></Button>-->
                 </Grid>
 
                 <DataGrid x:Name="budgetsDataGrid" AutoGenerateColumns="False">

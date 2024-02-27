@@ -207,6 +207,12 @@ namespace FinanceManagement
         {
             Close();
         }
+
+        private void updateBudgetBtn_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateBudgetWindow updateBudgetWindow = new UpdateBudgetWindow();
+            updateBudgetWindow.ShowDialog();
+        }
     }
 }
 
