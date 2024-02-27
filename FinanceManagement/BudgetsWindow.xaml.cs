@@ -211,23 +211,29 @@ namespace FinanceManagement
 
         private void updateBudgetBtn_Click(object sender, RoutedEventArgs e)
         {
-            UpdateBudgetWindow updateBudgetWindow = new UpdateBudgetWindow();
-            //updateBudgetWindow.ShowDialog();
             var row = sender as DataGridRow;
-            var budget = row.DataContext as BudgetLimit;
             var editBudget = new UpdateBudgetWindow();
-            editBudget.PrevBudget += EditBudget_PrevBudget;
-            editBudget.NextBudget += EditBudget_NextBudget;
-            editBudget.Owner = this;
-            editBudget.ShowBudgets(budget);
 
+            var blurEffect = new System.Windows.Media.Effects.BlurEffect();
+            blurEffect.Radius = 5;
+            this.Effect = blurEffect;
+            budgetsDataGrid.SelectedIndex = 0;
+            editBudget.PrevBudget += EditBudget_PrevBudget; // Annahme, dass diese Event-Handler bereits implementiert sind
+            editBudget.NextBudget += EditBudget_NextBudget;
+            var firstBudget = dB.GetFirstBudgetEntry();
+            editBudget.Owner = this;
+
+            if (firstBudget != null)
+            {
+                editBudget.ShowBudgets(firstBudget);
+            }
 
             editBudget.DataUpdated += (sender, e) =>
             {
                 RefreshDataGrid();
                 SetFocusOnUpdatedItem(editBudget.LastUpdatedId);
-
             };
+            this.Effect = null;
         }
     }
 }
