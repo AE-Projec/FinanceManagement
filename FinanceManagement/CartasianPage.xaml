@@ -4,11 +4,23 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:FinanceManagement"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CartasianPage">
 
     <Grid>
-        
+        <lvc:CartesianChart Grid.Column="1" LegendLocation="Right">
+            <lvc:CartesianChart.Series>
+                <lvc:ColumnSeries Title="2019" Values="20, 30, 50, 70" DataLabels="True"/>
+                <lvc:ColumnSeries Title="2020" Values="30, 40, 60, 80" DataLabels="True"/>
+            </lvc:CartesianChart.Series>
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Title="Monate" Labels="Jan, Feb, Mär, Apr"/>
+            </lvc:CartesianChart.AxisX>
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis Title="Wert" LabelFormatter="{Binding YFormatter}"/>
+            </lvc:CartesianChart.AxisY>
+        </lvc:CartesianChart>
     </Grid>
 </Page>

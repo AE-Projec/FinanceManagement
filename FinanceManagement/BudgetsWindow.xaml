@@ -44,7 +44,7 @@
                     </Button.Content>
                     </Button>
 
-                <Button Content="DB neu laden" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="Button_Reload_Click"/>
+               <!-- <Button Content="DB neu laden" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="Button_Reload_Click"/>-->
                 <Button Content="Zurück" x:Name="backBtn" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="backBtn_Click"/>
                 
                 <!-- Weitere Navigationsbuttons -->

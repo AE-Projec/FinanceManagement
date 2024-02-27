@@ -88,11 +88,11 @@ namespace FinanceManagement
             budgetsDataGrid.ItemsSource = data;
             
         }
-
+        /*
         private void Button_Reload_Click(object sender, RoutedEventArgs e)
         {
             dB.ReadData(budgetsDataGrid);
-        }
+        }*/
         //gleiche funktion wie beim aktualisieren nur alles disabled
         //schließen, löschen, vor und zurück
         private void Button_Delete_BudgetWindow_Click(object sender, RoutedEventArgs e)

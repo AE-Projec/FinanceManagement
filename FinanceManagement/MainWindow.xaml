@@ -34,17 +34,28 @@
 
         <StackPanel Grid.Column="0" Background="#FF2D2D30">
             <Button Content="Budgets" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="Button_Budgets_Click"/>
-            <Button Content="Finanzplanung" x:Name="financial_planning" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left"/>
-            
 
-            <Button Content="Finanzübersicht" x:Name="financial_overview" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left"/>
-            <Popup x:Name="financial_planning_popup" Placement="Bottom" PlacementTarget="{Binding ElementName=financial_planning}" StaysOpen="False" AllowsTransparency="True">
-                <Border Background="WhiteSmoke" Padding="10">
+            <Button Content="Finanzplanung" x:Name="financial_planning" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="financial_planning_Click"/>
+            <Button Content="Finanzübersicht" x:Name="financial_overview" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="financial_overview_Click"/>
+            
+            <!--Financial Planing/Finanzplanung-->
+            <Popup x:Name="financial_planning_popup" Placement="Right" PlacementTarget="{Binding ElementName=financial_planning}" StaysOpen="False" AllowsTransparency="True">
+                <Border Background="Black" Padding="10">
                     <StackPanel>
-                        <Button Content="Kreisdiagramm" Padding="10"/>
-                        <Button Content="Balkendiagramm" Padding="10"/>
+                        <Button Content="Einnahmen" Padding="10" x:Name="financial_planing_revenue" Click="financial_planing_revenue_Click"/>
+                        <Button Content="Ausgaben" Padding="10" x:Name="financial_planing_expenditure" Click="financial_planing_expenditure_Click"/>
                     </StackPanel>
                 </Border>
+            </Popup>
+            <!--Financial Overview / Finanzübersicht-->
+            <Popup x:Name="financial_overview_popup" Placement="Right" PlacementTarget="{Binding ElementName=financial_overview}" StaysOpen="False" AllowsTransparency="True">
+                <Border Background="Black" Padding="10">
+                    <StackPanel>
+                        <Button Content="Kreisdiagramm" Padding="10" x:Name="financial_overview_pieChart" Click="financial_overview_pieChart_Click"/>
+                        <Button Content="Balkendiagramm" Padding="10" x:Name="financial_overview_cartasianChart" Click="financial_overview_cartasianChart_Click"/>
+                    </StackPanel>
+                </Border>
+                
             </Popup>
             <Button Content="About" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left"/>
             <Button Content="Exit" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="Button_Exit_Click"/>
@@ -53,7 +64,11 @@
         </StackPanel>
 
         <Grid Grid.Column="1" Background="White">
+            
             <!-- Hauptinhaltsbereich -->
+        </Grid>
+        <Grid Grid.Column="2">
+            <Frame x:Name="ContentFrame" NavigationUIVisibility="Hidden"/>
         </Grid>
     </Grid>
 </Window>
