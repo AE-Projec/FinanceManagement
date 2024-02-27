@@ -172,6 +172,7 @@ namespace FinanceManagement
             };
 
         }
+        //setzt den fokus auf die ID die aktualisiert wurde
         private void SetFocusOnUpdatedItem(int updatedId)
         {
             var itemToSelect = budgetsDataGrid.Items.Cast<BudgetLimit>().FirstOrDefault(item => item.BudgetID == updatedId);
@@ -211,7 +212,22 @@ namespace FinanceManagement
         private void updateBudgetBtn_Click(object sender, RoutedEventArgs e)
         {
             UpdateBudgetWindow updateBudgetWindow = new UpdateBudgetWindow();
-            updateBudgetWindow.ShowDialog();
+            //updateBudgetWindow.ShowDialog();
+            var row = sender as DataGridRow;
+            var budget = row.DataContext as BudgetLimit;
+            var editBudget = new UpdateBudgetWindow();
+            editBudget.PrevBudget += EditBudget_PrevBudget;
+            editBudget.NextBudget += EditBudget_NextBudget;
+            editBudget.Owner = this;
+            editBudget.ShowBudgets(budget);
+
+
+            editBudget.DataUpdated += (sender, e) =>
+            {
+                RefreshDataGrid();
+                SetFocusOnUpdatedItem(editBudget.LastUpdatedId);
+
+            };
         }
     }
 }

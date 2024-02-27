@@ -35,7 +35,17 @@
         <StackPanel Grid.Column="0" Background="#FF2D2D30">
             <Button Content="Budgets" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="Button_Budgets_Click"/>
             <Button Content="Finanzplanung" x:Name="financial_planning" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left"/>
+            
+
             <Button Content="Finanzübersicht" x:Name="financial_overview" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left"/>
+            <Popup x:Name="financial_planning_popup" Placement="Bottom" PlacementTarget="{Binding ElementName=financial_planning}" StaysOpen="False" AllowsTransparency="True">
+                <Border Background="WhiteSmoke" Padding="10">
+                    <StackPanel>
+                        <Button Content="Kreisdiagramm" Padding="10"/>
+                        <Button Content="Balkendiagramm" Padding="10"/>
+                    </StackPanel>
+                </Border>
+            </Popup>
             <Button Content="About" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left"/>
             <Button Content="Exit" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="Button_Exit_Click"/>
             <!-- Weitere Navigationsbuttons -->
