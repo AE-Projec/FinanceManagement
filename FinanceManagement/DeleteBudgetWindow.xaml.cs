@@ -74,15 +74,18 @@ namespace FinanceManagement
         }
 
 
+        public int LastDeletedId { get; private set; }
         private void deleteEntry_btn_Click(object sender, RoutedEventArgs e)
         {
+            
             int budgetId = Convert.ToInt32(BudgetID.Text);
-
+            LastDeletedId = budgetId;
 
             db.DeleteData(budgetId);
             MessageBox.Show($"Datensatz {budgetId} erfolgreich aus der Datenbank entfernt.");
              db.ReadData();
             DataUpdated?.Invoke(this, EventArgs.Empty);
+
         }
 
         private void cancel_btn_Click(object sender, RoutedEventArgs e)

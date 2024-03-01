@@ -69,6 +69,8 @@ namespace FinanceManagement
             
          }
 
+        public int LastUpdatedId { get; private set; }
+
         private void Button_Add_New_Budget_Click(object sender, RoutedEventArgs e)
         {
 
@@ -117,6 +119,16 @@ namespace FinanceManagement
             deleteBudget.DataUpdated += (sender, e) =>
             {
                 RefreshDataGrid();
+               SetFocusOnUpdatedItem(deleteBudget.LastDeletedId);
+            };
+
+            deleteBudget.Closed += (s, args) =>
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    budgetsDataGrid.UnselectAll();
+                    Keyboard.ClearFocus();
+                }), System.Windows.Threading.DispatcherPriority.Background);
             };
         }
        
@@ -142,7 +154,7 @@ namespace FinanceManagement
 
         }
 
-        public int LastUpdatedId { get; private set; }
+       
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;

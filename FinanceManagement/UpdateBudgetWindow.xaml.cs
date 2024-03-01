@@ -116,10 +116,10 @@ namespace FinanceManagement
             budgetLimit.Comment = Comment.Text;
            // UpdateBudgetWindow editBudget = new UpdateBudgetWindow();
 
-            BudgetsWindow budgets = new BudgetsWindow();
+          //  BudgetsWindow budgets = new BudgetsWindow();
 
 
-            var dataG = budgets.budgetsDataGrid;
+           // var dataG = budgets.budgetsDataGrid;
             //dataG.SelectedIndex = budgetId;/*
            // budgetId = dataG.SelectedIndex;
 

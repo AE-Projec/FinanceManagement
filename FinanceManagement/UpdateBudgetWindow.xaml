@@ -26,7 +26,7 @@
             <Label Content="ID" Grid.Row="0" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
             <Label Content="Betrag" Grid.Row="1" VerticalAlignment="Center" Height="30" Margin="0,0,410,10" />
             <Label Content="Währung" Grid.Row="2" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
-            <Label Content="Limit d. Jahres" Grid.Row="3" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Geltungsjahr" Grid.Row="3" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
             <Label Content="Kategorie" Grid.Row="4" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
             <Label Content="Erstellt am" Grid.Row="5" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
             <Label Content="Status" Grid.Row="6" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
@@ -35,7 +35,7 @@
             <userControls:ClearableTextBox Grid.Row="0" Width="400" Height="30" Placeholder="ID" x:Name="BudgetID" Foreground="Black" Margin="80,0,0,10" IsEnabled="False"/>
             <userControls:ClearableTextBox Grid.Row="1" Width="400" Height="30" Placeholder="Betrag" x:Name="Budget_Amount" Foreground="Black" Margin="80,0,0,10"/>
             <userControls:ClearableTextBox Grid.Row="2" Width="400" Height="30" Placeholder="Währung" x:Name="Currency" Margin="80,0,0,10"/>
-            <userControls:ClearableTextBox Grid.Row="3" Width="400" Height="30" Placeholder="Limit des Jahres" x:Name="Year_Limit" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="3" Width="400" Height="30" Placeholder="Geltungsjahr" x:Name="Year_Limit" Margin="80,0,0,10"/>
             <userControls:ClearableTextBox Grid.Row="4" Width="400" Height="30" Placeholder="Kategorie" x:Name="Budget_Category" Margin="80,0,0,10"/>
             <userControls:ClearableTextBox Grid.Row="5" Width="400" Height="30" Placeholder="Erstellt am " x:Name="Creation_Date" Margin="80,0,0,10"/>
             <userControls:ClearableTextBox Grid.Row="6" Width="400" Height="30" Placeholder="Status " x:Name="Budget_Status" Margin="80,0,0,10"/>

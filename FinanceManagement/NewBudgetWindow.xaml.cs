@@ -26,7 +26,7 @@ namespace FinanceManagement
         DB dB = new DB();
         //BudgetsWindow budgetsWindow = new BudgetsWindow();
 
-        //private DataGrid budgetsDataGrid;
+        private DataGrid budgetsDataGrid;
 
         public NewBudgetWindow()
         {
@@ -53,13 +53,13 @@ namespace FinanceManagement
 
         private void NewBudgetWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //UpdateButtonVisibility();
+           UpdateButtonVisibility();
         }
 
         private void Button_InserIntoDB_Click(object sender, RoutedEventArgs e)
         {
 
-         /*  string budgetAmount = Budget_Amount.Text;
+           string budgetAmount = Budget_Amount.Text;
 
             bool isYearLimitParseSuccessful = int.TryParse(Year_Limit.Text, out int yearLimit);
             if (!isYearLimitParseSuccessful)
@@ -68,19 +68,16 @@ namespace FinanceManagement
                yearLimit = 0;
            }
 
-            //string creationDateString = Creation_Date.Text;
-
-
             string budgetCategory = Budget_Category.Text;
          
 
-            string creationDateString = datePicker.SelectedDate.Value.ToString();
+            string creationDateString = Creation_Date.Text;
             string budgetStatus = Budget_Status.Text;
             string approvedBy = Approved_By.Text;
             string comment = Comment.Text;
-            string currency = Currency.Text;*/
+            string currency = Currency.Text;
            
-           // dB.InsertData(budgetAmount, yearLimit, budgetCategory, creationDateString, budgetStatus, approvedBy, comment, currency);
+            dB.InsertData(budgetAmount, yearLimit, budgetCategory, creationDateString, budgetStatus, approvedBy, comment, currency);
 
 
             MessageBox.Show("Ein neuer Datensatz wurde hinzugefügt!");
@@ -96,7 +93,7 @@ namespace FinanceManagement
         }
 
         //Pflichtangaben
-        /*
+      
         private void UpdateButtonVisibility()
         {
 
@@ -111,7 +108,7 @@ namespace FinanceManagement
             {
                 insertIntoDB_btn.Visibility = Visibility.Visible;
             }
-        }*/
+        }
 
 
         private void close_btn_Click(object sender, RoutedEventArgs e)
@@ -119,15 +116,15 @@ namespace FinanceManagement
             Close();
         }
 
-        /*
+        
         private bool IsBudgetAmountValid()
         {
            return int.TryParse(Budget_Amount.Text, out _);
         }
-        */
+        
         private void Budget_Amount_TextChanged(object sender, TextChangedEventArgs e)
         {
-            /*
+            
             if (!IsBudgetAmountValid() && !string.IsNullOrWhiteSpace(Budget_Amount.Text))
             {
                 Budget_Amount_Label.Content = "Ihr eingegebener Wert ist keine Zahl";
@@ -136,17 +133,17 @@ namespace FinanceManagement
             {
                 Budget_Amount_Label.Content = "";
             }
-            UpdateButtonVisibility();*/
+            UpdateButtonVisibility();
         }
-        /*
+        
         private bool IsCurrencyValid()
         {
             return Currency.Text.Length <= 3;
-        }*/
+        }
 
 
         private void Currency_TextChanged(object sender, TextChangedEventArgs e)
-        {/*
+        {
             if (!IsCurrencyValid() && !string.IsNullOrWhiteSpace(Currency.Text))
             {
                 Currency_Length.Content = "Ihre Währungseingabe ist zu lang";
@@ -155,7 +152,7 @@ namespace FinanceManagement
             {
                 Currency_Length.Content = "";
             }
-            UpdateButtonVisibility();*/
+            UpdateButtonVisibility();
         }
 
         /*
