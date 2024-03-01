@@ -21,22 +21,32 @@ namespace FinanceManagement
     public partial class DeleteBudgetWindow : Window
     {
         DB db = new DB();
-        public event EventHandler DataUpdated;
+       // public event EventHandler DataUpdated;
+        public event EventHandler DataDeleted;
+        NewBudgetWindow budgetWindow = new NewBudgetWindow();
 
         public event Action<DeleteBudgetWindow> NextBudget;
         public event Action<DeleteBudgetWindow> PrevBudget;
 
         public BudgetLimit budgetLimit { get; set; }
-       // public int CurrentIndex {get; set;}
+        // public int CurrentIndex {get; set;}
         public DeleteBudgetWindow()
         {
             InitializeComponent();
-
-            
             LoadFirstBudgetEntry();
+            db.RecordRemoved += Db_RecordRemoved;
+            
+
+
         }
 
-  
+        private void Db_RecordRemoved(object? sender, EventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                db.ReadData();
+            });
+        }
 
         public void ShowBudgets(BudgetLimit budgets)
         {
@@ -73,18 +83,18 @@ namespace FinanceManagement
             }
         }
 
-
+        
         public int LastDeletedId { get; private set; }
         private void deleteEntry_btn_Click(object sender, RoutedEventArgs e)
         {
             
             int budgetId = Convert.ToInt32(BudgetID.Text);
+  
+            db.DeleteData(budgetId);
             LastDeletedId = budgetId;
 
-            db.DeleteData(budgetId);
+            DataDeleted?.Invoke(this, EventArgs.Empty);
             MessageBox.Show($"Datensatz {budgetId} erfolgreich aus der Datenbank entfernt.");
-             db.ReadData();
-            DataUpdated?.Invoke(this, EventArgs.Empty);
 
         }
 

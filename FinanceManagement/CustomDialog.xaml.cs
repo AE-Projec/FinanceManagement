@@ -37,15 +37,6 @@ namespace FinanceManagement
             csvWindow.Bw = this.Bw;
             csvWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             csvWindow.ShowDialog();
-            /*
-            csvWindow csvWindow = new csvWindow
-            {
-                Owner = this,
-                
-                WindowStartupLocation = WindowStartupLocation.CenterScreen
-            };*/
-
-
 
         }
 

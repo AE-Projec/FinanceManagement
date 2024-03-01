@@ -14,6 +14,7 @@ namespace FinanceManagement
         public event Action? DataUpdated;
         public event Action? DataShouldBeReloaded;
         public event EventHandler? RecordAdded;
+        public event EventHandler? RecordRemoved;
 
         public void ReadData(DataGrid budgetsDataGrid)
         {
@@ -326,9 +327,13 @@ namespace FinanceManagement
                 using (SqlCommand cmd = new SqlCommand(
                         "Delete from BudgetLimits where BudgetID = @ID ", con))
                 {
-                    cmd.Parameters.AddWithValue("@ID", budgetId);
+                    cmd.Parameters.AddWithValue("@ID", budgetId)
+                        ;
                     cmd.ExecuteNonQuery();
                 }
+
+                RecordRemoved?.Invoke(this, EventArgs.Empty);
+                con.Close();
             }
 
         }

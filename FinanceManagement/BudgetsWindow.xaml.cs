@@ -27,7 +27,7 @@ namespace FinanceManagement
     public partial class BudgetsWindow : Window
     {
         DB dB = new DB();
-        
+
 
         public BudgetsWindow()
         {
@@ -66,8 +66,8 @@ namespace FinanceManagement
         public DataGrid PublicDataGrid
         {
             get { return budgetsDataGrid; }
-            
-         }
+
+        }
 
         public int LastUpdatedId { get; private set; }
 
@@ -82,13 +82,13 @@ namespace FinanceManagement
 
             this.Effect = null;
         }
-        
+
 
         public void RefreshDataGrid()
         {
             var data = dB.ReadData();
             budgetsDataGrid.ItemsSource = data;
-            
+
         }
         /*
         private void Button_Reload_Click(object sender, RoutedEventArgs e)
@@ -99,39 +99,32 @@ namespace FinanceManagement
         //schließen, löschen, vor und zurück
         private void Button_Delete_BudgetWindow_Click(object sender, RoutedEventArgs e)
         {
-            var row = sender as DataGridRow;
             var deleteBudget = new DeleteBudgetWindow();
+            var row = sender as DataGridRow;
+
+            deleteBudget.DataDeleted += (sender, e) =>
+             {
+                 RefreshDataGrid();
+             };
 
             var blurEffect = new System.Windows.Media.Effects.BlurEffect();
             blurEffect.Radius = 5;
             this.Effect = blurEffect;
             budgetsDataGrid.SelectedIndex = 0;
-            
+
             deleteBudget.PrevBudget += DeleteBudget_PrevBudget;
             deleteBudget.NextBudget += DeleteBudget_NextBudget;
 
             deleteBudget.Owner = this;
-            
+
             deleteBudget.ShowDialog();
+
             this.Effect = null;
 
 
-            deleteBudget.DataUpdated += (sender, e) =>
-            {
-                RefreshDataGrid();
-               SetFocusOnUpdatedItem(deleteBudget.LastDeletedId);
-            };
 
-            deleteBudget.Closed += (s, args) =>
-            {
-                Dispatcher.Invoke(new Action(() =>
-                {
-                    budgetsDataGrid.UnselectAll();
-                    Keyboard.ClearFocus();
-                }), System.Windows.Threading.DispatcherPriority.Background);
-            };
         }
-       
+
         private void DeleteBudget_PrevBudget(DeleteBudgetWindow deleteBudget)
         {
             if (budgetsDataGrid.SelectedIndex > 0)
@@ -142,7 +135,7 @@ namespace FinanceManagement
             deleteBudget.ShowBudgets(budget);
 
         }
-       
+
         private void DeleteBudget_NextBudget(DeleteBudgetWindow deleteBudget)
         {
             if (budgetsDataGrid.SelectedIndex + 1 < budgetsDataGrid.Items.Count - 1)
@@ -154,7 +147,7 @@ namespace FinanceManagement
 
         }
 
-       
+
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
@@ -165,15 +158,16 @@ namespace FinanceManagement
             editBudget.Owner = this;
             editBudget.ShowBudgets(budget);
 
-            
+
             editBudget.DataUpdated += (sender, e) =>
             {
                 RefreshDataGrid();
-                SetFocusOnUpdatedItem(editBudget.LastUpdatedId);
-                
+
+                //SetFocusOnUpdatedItem(editBudget.LastUpdatedId);
+
             };
 
-
+            //hebt den fokus auf nach dem schließen des fensters
             editBudget.Closed += (s, args) =>
             {
                 Dispatcher.Invoke(new Action(() =>
@@ -199,7 +193,7 @@ namespace FinanceManagement
             if (budgetsDataGrid.SelectedIndex > 0)
             {
                 budgetsDataGrid.SelectedIndex -= 1;
-                
+
             }
             var budget = budgetsDataGrid.SelectedItem as BudgetLimit;
             editBudget.ShowBudgets(budget);
@@ -230,7 +224,7 @@ namespace FinanceManagement
             blurEffect.Radius = 5;
             this.Effect = blurEffect;
             budgetsDataGrid.SelectedIndex = 0;
-            editBudget.PrevBudget += EditBudget_PrevBudget; // Annahme, dass diese Event-Handler bereits implementiert sind
+            editBudget.PrevBudget += EditBudget_PrevBudget;
             editBudget.NextBudget += EditBudget_NextBudget;
             var firstBudget = dB.GetFirstBudgetEntry();
             editBudget.Owner = this;

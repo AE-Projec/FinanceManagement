@@ -24,9 +24,6 @@ namespace FinanceManagement
     {
 
         DB dB = new DB();
-        //BudgetsWindow budgetsWindow = new BudgetsWindow();
-
-        private DataGrid budgetsDataGrid;
 
         public NewBudgetWindow()
         {
@@ -78,7 +75,6 @@ namespace FinanceManagement
             string currency = Currency.Text;
            
             dB.InsertData(budgetAmount, yearLimit, budgetCategory, creationDateString, budgetStatus, approvedBy, comment, currency);
-
 
             MessageBox.Show("Ein neuer Datensatz wurde hinzugefügt!");
 
