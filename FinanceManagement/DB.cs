@@ -108,6 +108,8 @@ namespace FinanceManagement
             });
         }
 
+        //todo methode anpassen um diese dynamisch zu gestalten das sie mehrfach verändert werden kann
+        // um andere tabellen zu verwenden mit einer methode
         public List<BudgetLimit> ReadData()
         {
             List<BudgetLimit> results = new List<BudgetLimit>();
@@ -153,6 +155,60 @@ namespace FinanceManagement
 
         }
 
+       public List<T> ReadData<T> (string tableName) where T : new()
+        {
+            var results = new List<T>();
+            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
+            var query = $"select * from {tableName}";
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                using (var command = new SqlCommand(query, connection))
+                {
+                    try
+                    {
+                        connection.Open();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var item = CreateItemFromReader<T>(reader);
+                                results.Add(item);
+                            }
+                        }
+                    }
+                    catch (Exception ex)  
+                    {
+                        MessageBox.Show ($"Ein fehler ist aufgetreten: {ex.Message}");
+                    }
+                }
+            }
+            return results;
+        }
+
+        private T CreateItemFromReader<T>(SqlDataReader reader) where T : new()
+        {
+            T item = new T();
+            foreach(var property in typeof(T).GetProperties())
+            {
+                if(!reader.IsDBNull(reader.GetOrdinal(property.Name)))
+                {
+                    
+                    if(property.PropertyType == typeof(DateOnly?) || property.PropertyType == typeof(DateTime))
+                    {
+                        var dateValue = reader.GetDateTime(reader.GetOrdinal(property.Name));
+                        property.SetValue(item, DateOnly.FromDateTime(dateValue));
+                    }
+                    else
+                    {
+                        var value = reader[property.Name];
+                        property.SetValue(item, value);
+                    }
+                    
+                }
+            }
+            return item;
+        }
         //todo : Datum bei eintragung in die DB über UI in deutsch anzeigen
         public void InsertData(string budgetAmount, int yearLimit, string budgetCategory, string creationDate, string budgetStatus, string approvedBy, string comment, string currency)
         {

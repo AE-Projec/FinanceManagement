@@ -90,7 +90,7 @@ namespace FinanceManagement
             budgetsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
             budgetsDataGrid.CommitEdit();
 
-            var data = dB.ReadData();
+            var data = dB.ReadData<BudgetLimit>("BudgetLimits");
             budgetsDataGrid.ItemsSource = data;
 
         }

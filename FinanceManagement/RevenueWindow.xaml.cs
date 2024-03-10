@@ -19,9 +19,58 @@ namespace FinanceManagement
     /// </summary>
     public partial class RevenueWindow : Window
     {
+        DB dB = new DB();
         public RevenueWindow()
         {
+           
             InitializeComponent();
+            RefreshDataGrid();
+            
+            
+        }
+
+        public void RefreshDataGrid()
+        {
+
+            RevenuesDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+            RevenuesDataGrid.CommitEdit();
+            try
+            {
+                var revenues = dB.ReadData<Revenue>("Revenue");
+                RevenuesDataGrid.ItemsSource = revenues;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ein fehler ist aufgetreten: {ex.Message}");
+            }
+            //var data = dB.ReadData();
+            //budgetsDataGrid.ItemsSource = data;
+
+        }
+
+        private void Button_Add_New_Revenue_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Delete_Revenue_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void updateRevenueBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void backBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

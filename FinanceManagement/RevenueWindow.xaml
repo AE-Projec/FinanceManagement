@@ -6,7 +6,75 @@
         xmlns:local="clr-namespace:FinanceManagement"
         mc:Ignorable="d"
         Title="RevenueWindow" Height="450" Width="800" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#333"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
-        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Background="#FF2D2D30">
+                <Button Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="Button_Add_New_Revenue_Click">
+                    <Button.Content >
+                        <TextBlock Text="Neue Einnahme hinzufügen" TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
+                <Button Content="Einnahme Entfernen" Foreground="White" Background="Transparent" 
+                        Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" 
+                        Click="Button_Delete_Revenue_Click"/>
+                <Button x:Name="updateRevenueBtn" Click="updateRevenueBtn_Click">
+                    <Button.Content>
+                        <TextBlock Text="Einnahmen Aktualisieren" TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
+
+                <!-- <Button Content="DB neu laden" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="Button_Reload_Click"/>-->
+                <Button Content="Zurück" x:Name="backBtn" Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="backBtn_Click"/>
+
+                <!-- Weitere Navigationsbuttons -->
+            </StackPanel>
+
+            <Grid Grid.Column="1" Background="LightGray">
+                <!-- Hauptinhalt-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                </Grid>
+
+                <DataGrid x:Name="RevenuesDataGrid" AutoGenerateColumns="False">
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridRow">
+                            <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Einnahmen ID" Binding="{Binding RevenueID}" x:Name="RevenueId"/>
+                        <DataGridTextColumn Header="Transaktionsart" Binding="{Binding TransactionType}" x:Name="TransactionType"/>
+                        <DataGridTextColumn Header="Betrag" Binding="{Binding Amount}" x:Name="Amount"/>
+                        <DataGridTextColumn Header="Währung" Binding="{Binding Currency}" x:Name="Currency"/>
+                        <DataGridTextColumn Header="Transaktionsdatum" Binding="{Binding TransactionDate}" x:Name="TransactionDate"/>
+                        <DataGridTextColumn Header="Kategorie" Binding="{Binding Category}" x:Name="Category"/>
+                        <DataGridTextColumn Header="Beschreibung" Binding="{Binding Description}" x:Name="Description"/>
+                        <DataGridTextColumn Header="Zahlungsmethode" Binding="{Binding PaymentMethod }" x:Name="PaymentMethod"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

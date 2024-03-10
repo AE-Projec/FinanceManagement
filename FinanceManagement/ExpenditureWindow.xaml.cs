@@ -21,7 +21,9 @@ namespace FinanceManagement
     {
         public ExpenditureWindow()
         {
+            
             InitializeComponent();
+            
         }
     }
 }
