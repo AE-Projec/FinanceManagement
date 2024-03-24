@@ -36,7 +36,7 @@ namespace FinanceManagement
         private void DB_RecordAdded(object? sender, EventArgs e)
         {
             Dispatcher.Invoke(() => {
-                dB.ReadData();
+                dB.ReadData<BudgetLimits>("BudgetLimits");
             });
             
         }

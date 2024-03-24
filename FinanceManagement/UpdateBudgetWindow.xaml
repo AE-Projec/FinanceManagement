@@ -55,21 +55,4 @@
             </Button>
         </Grid>
     </StackPanel>
-    
-
-    <!--
-        <ComboBox x:Name="ColumnSelectionComboBox" Width="200" Margin="0,0,0,10" HorizontalAlignment="Left">
-            <ComboBoxItem Content="ID" />
-            <ComboBoxItem Content="Budget" />
-             Weitere Spaltennamen hinzufügen
-        </ComboBox>
-        <userControls:ClearableTextBox x:Name="SearchValueTextBox" Width="200" Height="20" VerticalAlignment="Top"
-                                       Margin="0,-30,120,0" Placeholder="Geben sie ein was sie suchen"/>
-        <TextBox x:Name="SearchValueTextBox" Width="200" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button Content="Suchen" Width="200" x:Name="SearchValuebtn" Margin="340,-40,0,0" Height="20" Click="SearchValuebtn_Click"/>
-        <DataGrid x:Name="ResultsDataGrid" AutoGenerateColumns="True" CanUserAddRows="False"
-                  Margin="0,10,0,0" IsReadOnly="False" RowEditEnding="ResultDataGrid_RowEditEnding"/>
-        -->
-    
-
 </Window>

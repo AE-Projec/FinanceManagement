@@ -28,7 +28,7 @@ namespace FinanceManagement
         public event Action<DeleteBudgetWindow> NextBudget;
         public event Action<DeleteBudgetWindow> PrevBudget;
 
-        public BudgetLimit budgetLimit { get; set; }
+        public BudgetLimits budgetLimit { get; set; }
         // public int CurrentIndex {get; set;}
         public DeleteBudgetWindow()
         {
@@ -44,11 +44,11 @@ namespace FinanceManagement
         {
             Dispatcher.Invoke(() =>
             {
-                db.ReadData();
+                db.ReadData<BudgetLimits>("BudgetLimits");
             });
         }
-
-        public void ShowBudgets(BudgetLimit budgets)
+        
+        public void ShowBudgets(BudgetLimits budgets)
         {
             budgetLimit = budgets;
             BudgetID.Text = $"{budgetLimit.BudgetID}";
@@ -66,7 +66,8 @@ namespace FinanceManagement
         private void LoadFirstBudgetEntry()
         {
 
-            var firstBudget = db.GetFirstBudgetEntry();
+            var firstBudget = db.ReadFirstEntry<BudgetLimits>("BudgetLimits");
+            //var firstBudget = db.GetFirstBudgetEntry();
             
             if (firstBudget != null)
             {
@@ -89,8 +90,7 @@ namespace FinanceManagement
         {
             
             int budgetId = Convert.ToInt32(BudgetID.Text);
-  
-            db.DeleteData(budgetId);
+            db.DeleteData<BudgetLimits>("BudgetLimits", "BudgetID", budgetId);
             LastDeletedId = budgetId;
 
             DataDeleted?.Invoke(this, EventArgs.Empty);

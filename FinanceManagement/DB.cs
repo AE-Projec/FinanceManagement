@@ -1,10 +1,12 @@
 ﻿using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace FinanceManagement
 {
@@ -16,57 +18,9 @@ namespace FinanceManagement
         public event EventHandler? RecordAdded;
         public event EventHandler? RecordRemoved;
 
-        public void ReadData(DataGrid budgetsDataGrid)
-        {
 
-            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
-            List<BudgetLimit> budgetLimits = new List<BudgetLimit>();
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    con.Open();
-                    using (SqlCommand cmd = new SqlCommand("Select * from BudgetLimits", con))
-                    {
 
-                        SqlDataReader reader = cmd.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            var budgetLimit = new BudgetLimit()
-                            {
-                                BudgetID = reader["BudgetID"] as int?,
-                                Budget_Amount = reader["Budget_Amount"] as int?,
-                                Budget_Limit_Year = reader["Budget_Limit_Year"] as int?,
-                                Budget_Category = reader["Budget_Category"] as string,
-                                Creation_Date = reader["Creation_Date"] != DBNull.Value ? DateOnly.FromDateTime((DateTime)reader["Creation_Date"]) : (DateOnly?)null,
-                                Budget_Status = reader["Budget_Status"] as string,
-                                Approved_By = reader["Approved_By"] as string,
-                                Comment = reader["Comment"] as string,
-                                Currency = reader["Currency"] as string
-
-                            };
-                            budgetLimits.Add(budgetLimit);
-                            DataUpdated?.Invoke();
-                        }
-                        reader.Close();
-                    }
-
-                }
-
-                catch (SqlException ex)
-                {
-
-                    MessageBox.Show($"Ein Fehler ist aufgetreten beim Zugriff auf die Datenbank: {ex.Message}");
-                }
-            }
-            // Aktualisiere das DataGrid im UI-Thread
-            budgetsDataGrid.Dispatcher.Invoke(() =>
-                {
-
-                    budgetsDataGrid.ItemsSource = budgetLimits;
-                });
-        }
-
+        /*
         public void ReadData(DataGrid budgetsDataGrid, Action<int> onLoadedCallback)
         {
 
@@ -107,9 +61,10 @@ namespace FinanceManagement
                 onLoadedCallback?.Invoke(budgetLimits.Count);
             });
         }
-
+        */
         //todo methode anpassen um diese dynamisch zu gestalten das sie mehrfach verändert werden kann
         // um andere tabellen zu verwenden mit einer methode
+        /*
         public List<BudgetLimit> ReadData()
         {
             List<BudgetLimit> results = new List<BudgetLimit>();
@@ -154,8 +109,66 @@ namespace FinanceManagement
 
 
         }
+        */
 
-       public List<T> ReadData<T> (string tableName) where T : new()
+        //for the datagrid Budget get Updatedated, Important
+        public void ReadData(DataGrid budgetsDataGrid)
+        {
+
+            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
+            List<BudgetLimits> budgetLimits = new List<BudgetLimits>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand("Select * from BudgetLimits", con))
+                    {
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            var budgetLimit = new BudgetLimits()
+                            {
+                                BudgetID = reader["BudgetID"] as int?,
+                                Budget_Amount = reader["Budget_Amount"] as int?,
+                                Budget_Limit_Year = reader["Budget_Limit_Year"] as int?,
+                                Budget_Category = reader["Budget_Category"] as string,
+                                Creation_Date = reader["Creation_Date"] != DBNull.Value ? DateOnly.FromDateTime((DateTime)reader["Creation_Date"]) : (DateOnly?)null,
+                                Budget_Status = reader["Budget_Status"] as string,
+                                Approved_By = reader["Approved_By"] as string,
+                                Comment = reader["Comment"] as string,
+                                Currency = reader["Currency"] as string
+
+                            };
+                            budgetLimits.Add(budgetLimit);
+                            DataUpdated?.Invoke();
+                        }
+                        reader.Close();
+                    }
+
+                }
+
+                catch (SqlException ex)
+                {
+
+                    MessageBox.Show($"Ein Fehler ist aufgetreten beim Zugriff auf die Datenbank: {ex.Message}");
+                }
+            }
+            // Aktualisiere das DataGrid im UI-Thread
+            budgetsDataGrid.Dispatcher.Invoke(() =>
+            {
+
+                budgetsDataGrid.ItemsSource = budgetLimits;
+            });
+        }
+
+        /*---------------------
+        START OF GENERIC DB METHODS 
+
+         ---------------------*/
+
+        public List<T> ReadData<T>(string tableName) where T : new()
         {
             var results = new List<T>();
             connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
@@ -177,24 +190,210 @@ namespace FinanceManagement
                             }
                         }
                     }
-                    catch (Exception ex)  
+                    catch (Exception ex)
                     {
-                        MessageBox.Show ($"Ein fehler ist aufgetreten: {ex.Message}");
+                        MessageBox.Show($"Ein fehler ist aufgetreten: {ex.Message}");
                     }
                 }
             }
             return results;
         }
 
-        private T CreateItemFromReader<T>(SqlDataReader reader) where T : new()
+        public T? ReadFirstEntry<T>(string tableName) where T : new()
+        {
+            T? result = default;
+            //tableName = $"{typeof(T).Name}s";
+
+            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
+            var query = $"select top 1 * from {tableName} order by 1 asc";
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                using (var command = new SqlCommand(query, connection))
+                {
+                    try
+                    {
+                        connection.Open();
+                        SqlDataReader reader = command.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            result = CreateItemFromReader<T>(reader);
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ein fehler ist aufgetreten: {ex.Message}");
+                    }
+                }
+                return result;
+            }
+        }
+
+        public void InsertIntoData<T>(string tableName, T item)
+        {
+            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                // gibt alles aus der tabelle aus was keine ID ist(0 = keine ID , 1 = ID)
+                string query = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}' AND COLUMNPROPERTY(OBJECT_ID(TABLE_NAME), COLUMN_NAME, 'IsIdentity') = 0";
+
+                List<string> columns = new List<string>();
+                using (SqlCommand cmdColumns = new SqlCommand(query, con))
+                {
+                    using (SqlDataReader reader = cmdColumns.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            columns.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+                string columnNames = string.Join(", ", columns);
+                string parameters = string.Join(", ", columns.Select(col => $"@{col}"));
+
+                string insertQuery = $"INSERT INTO {tableName} ({columnNames}) VALUES ({parameters})";
+
+                using (SqlCommand cmd = new SqlCommand(insertQuery, con))
+                {
+                    foreach (var col in columns)
+                    {
+                        var prop = typeof(T).GetProperty(col);
+                        object value = prop?.GetValue(item) ?? DBNull.Value;
+                        if (value == null || value == DBNull.Value)
+                        {
+                            if (IsDateColumn(tableName, col))
+                            {
+                                cmd.Parameters.AddWithValue($"@{col}", DateTime.Now);
+                            }
+                            else
+                            {
+                                cmd.Parameters.AddWithValue($"@{col}", value);
+                            }
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue($"@{col}", value);
+                        }
+
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+                RecordAdded?.Invoke(this, EventArgs.Empty);
+                con.Close();
+            }
+        }
+
+        public void UpdateData<T>(string tableName, T item) where T : class
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    con.Open();
+
+                    // Spalten abrufen, die keine IDs sind
+                    string query = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}' AND COLUMNPROPERTY(OBJECT_ID(TABLE_NAME), COLUMN_NAME, 'IsIdentity') = 0";
+
+                    List<string> columns = new List<string>();
+                    using (SqlCommand cmdColumns = new SqlCommand(query, con))
+                    {
+                        using (SqlDataReader reader = cmdColumns.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                columns.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+
+                    string setClause = string.Join(", ", columns.Select(col => $"{col} = @{col}"));
+
+                    // WHERE-Klausel basierend auf der ID-Spalte erstellen
+                    var idColumnName = GetIdColumnName(tableName);
+                    string whereClause = $" WHERE {idColumnName} = @{idColumnName}";
+
+                    string updateQuery = $"UPDATE {tableName} SET {setClause}{whereClause}";
+
+                    // UPDATE-Abfrage ausführen
+                    using (SqlCommand cmd = new SqlCommand(updateQuery, con))
+                    {
+                        foreach (var col in columns)
+                        {
+                            var prop = typeof(T).GetProperty(col);
+                            object value = prop?.GetValue(item) ?? DBNull.Value;
+
+                            if (value is DateOnly dateOnlyValue)
+                            {
+                                value = dateOnlyValue.ToDateTime(default);
+                            }
+                            cmd.Parameters.AddWithValue($"@{col}", value == null || value == DBNull.Value ? GetDefaultValue(tableName, col) : value);
+                        }
+
+                        // ID-Parameter hinzufügen
+                        var idProp = typeof(T).GetProperties().FirstOrDefault(prop => prop.Name.Equals(idColumnName, StringComparison.OrdinalIgnoreCase));
+                        if (idProp != null)
+                        {
+                            var idValue = idProp.GetValue(item);
+                            cmd.Parameters.AddWithValue($"@{idColumnName}", idValue ?? DBNull.Value);
+                        }
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void DeleteData<T>(string tableName, string idColumnName, object idValue) where T : class
+        {
+            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    con.Open();
+                    // Spalte abrufen, die ein ID ist
+                    using (SqlCommand cmd = new SqlCommand(
+                            $"DELETE FROM {tableName} WHERE {idColumnName} = @ID", con))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", idValue);
+
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    RecordRemoved?.Invoke(this, EventArgs.Empty);
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+        /*-------------------------------------
+         END OF GENERIC DATABASE METHODS         
+
+         -------------------------------------*/
+
+        //Hilfsmethode für ReadData für die richtige ausgabe des Datums(Date)
+        private T? CreateItemFromReader<T>(SqlDataReader reader) where T : new()
         {
             T item = new T();
-            foreach(var property in typeof(T).GetProperties())
+            foreach (var property in typeof(T).GetProperties())
             {
-                if(!reader.IsDBNull(reader.GetOrdinal(property.Name)))
+                if (!reader.IsDBNull(reader.GetOrdinal(property.Name)))
                 {
-                    
-                    if(property.PropertyType == typeof(DateOnly?) || property.PropertyType == typeof(DateTime))
+                    if (property.PropertyType == typeof(DateOnly?) || property.PropertyType == typeof(DateTime))
                     {
                         var dateValue = reader.GetDateTime(reader.GetOrdinal(property.Name));
                         property.SetValue(item, DateOnly.FromDateTime(dateValue));
@@ -204,98 +403,30 @@ namespace FinanceManagement
                         var value = reader[property.Name];
                         property.SetValue(item, value);
                     }
-                    
+
                 }
             }
             return item;
         }
-        //todo : Datum bei eintragung in die DB über UI in deutsch anzeigen
-        public void InsertData(string budgetAmount, int yearLimit, string budgetCategory, string creationDate, string budgetStatus, string approvedBy, string comment, string currency)
+
+        // Hilfsmethode zum Überprüfen, ob eine Spalte ein Datumsfeld ist
+        private bool IsDateColumn(string tableName, string columnName)
         {
-            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
+            // Gibt den datentypen innerhalb der Tabelle und spalte aus
+            string query = $"SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}' AND COLUMN_NAME = '{columnName}'";
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
-                using (SqlCommand cmd = new SqlCommand(
-                    "INSERT INTO BudgetLimits " +
-                    "(Budget_Amount," +
-                    " Budget_Limit_Year," +
-                    " Budget_Category," +
-                    (string.IsNullOrEmpty(creationDate) ? "" : "Creation_Date,") +
-                    " Budget_Status," +
-                    " Approved_By," +
-                    " Comment," +
-                    " Currency)" +
-                    " VALUES" +
-                    " (@BudgetAmount," +
-                    " @YearLimit," +
-                    " @BudgetCategory," +
-                    (string.IsNullOrEmpty(creationDate) ? "" : "@CreationDate,") +
-                    " @BudgetStatus," +
-                    " @ApprovedBy" +
-                    ",@Comment," +
-                    " @Currency)",
-                    con))
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Parameters.AddWithValue("@BudgetAmount", budgetAmount ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@YearLimit", yearLimit);
-                    cmd.Parameters.AddWithValue("@BudgetCategory", budgetCategory ?? (object)DBNull.Value);
-                    if (!string.IsNullOrEmpty(creationDate) && DateTime.TryParse(creationDate, out DateTime parsedDate))
-                    {
-                        cmd.Parameters.AddWithValue("@CreationDate", parsedDate);
-                    }
-                    cmd.Parameters.AddWithValue("@BudgetStatus", budgetStatus ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@ApprovedBy", approvedBy ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Comment", comment ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Currency", currency ?? (object)DBNull.Value);
-
-
-                    cmd.ExecuteNonQuery();
-
+                    string dataType = (string)cmd.ExecuteScalar();
+                    return dataType == "date" || dataType == "datetime";
                 }
-                RecordAdded?.Invoke(this, EventArgs.Empty);
-                con.Close();
             }
         }
 
-
+        //todo : Datum bei eintragung in die DB über UI in deutsch anzeigen
         /*
-        public void UpdateData(int budgetId, string budgetAmount, int yearLimit, string budgetCategory, string creationDate, string budgetStatus, string approvedBy, string comment, string currency)
-        {
-            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-
-                using (SqlCommand cmd = new SqlCommand(
-                        "Update BudgetLimits Set " +
-                        "Budget_Amount = @BudgetAmount, " +
-                        "Budget_Limit_Year = @YearLimit, " +
-                        "Budget_Category = @BudgetCategory, " +
-                        "Creation_Date = @CreationDate, " +
-                        "Budget_Status = @BudgetStatus, " +
-                        "Approved_By = @ApprovedBy, " +
-                        "Comment = @Comment, " +
-                        "Currency = @Currency " +
-                        "Where BudgetID = @ID",
-                        con))
-                {
-                    cmd.Parameters.AddWithValue("@ID", budgetId);
-                    cmd.Parameters.AddWithValue("@BudgetAmount", budgetAmount);
-                    cmd.Parameters.AddWithValue("@YearLimit", yearLimit);
-                    cmd.Parameters.AddWithValue("@BudgetCategory", budgetCategory);
-                    cmd.Parameters.AddWithValue("@CreationDate", creationDate);
-                    cmd.Parameters.AddWithValue("@BudgetStatus", budgetStatus);
-                    cmd.Parameters.AddWithValue("@ApprovedBy", approvedBy);
-                    cmd.Parameters.AddWithValue("@Comment", comment);
-                    cmd.Parameters.AddWithValue("@Currency", currency);
-
-                    cmd.ExecuteNonQuery();
-                }
-            }
-
-        }*/
-
         public BudgetLimit GetFirstBudgetEntry()
         {
             connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
@@ -328,133 +459,36 @@ namespace FinanceManagement
             }
             return null;
 
-        }
-        public void UpdateData(BudgetLimit budgetLimit)
+        }*/
+
+        // Methode zum Abrufen des ID-Spaltennamens
+        private string? GetIdColumnName(string tableName)
         {
-            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    con.Open();
+            string connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
+            string query = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}' AND COLUMNPROPERTY(OBJECT_ID(TABLE_NAME), COLUMN_NAME, 'IsIdentity') = 1";
 
-                    string query = @"UPDATE BudgetLimits SET 
-                    Budget_Amount = @BudgetAmount, 
-                    Budget_Limit_Year = @YearLimit, 
-                    Budget_Category = @BudgetCategory, 
-                    Creation_Date = @CreationDate, 
-                    Budget_Status = @BudgetStatus, 
-                    Approved_By = @ApprovedBy, 
-                    Comment = @Comment, 
-                    Currency = @Currency 
-                    WHERE BudgetID = @ID";
-
-                    using (SqlCommand cmd = new SqlCommand(query, con))
-                    {
-                        cmd.Parameters.AddWithValue("@ID", budgetLimit.BudgetID);
-                        cmd.Parameters.AddWithValue("@BudgetAmount", budgetLimit.Budget_Amount ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@YearLimit", budgetLimit.Budget_Limit_Year ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@BudgetCategory", budgetLimit.Budget_Category ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@CreationDate", (object?)budgetLimit.Creation_Date?.ToDateTime(default) ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@BudgetStatus", budgetLimit.Budget_Status ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@ApprovedBy", budgetLimit.Approved_By ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@Comment", budgetLimit.Comment ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@Currency", budgetLimit.Currency ?? (object)DBNull.Value);
-
-                        cmd.ExecuteNonQuery();
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-                con.Close();
-            }
-        }
-
-        public void DeleteData(int budgetId)
-        {
-            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
 
-                using (SqlCommand cmd = new SqlCommand(
-                        "Delete from BudgetLimits where BudgetID = @ID ", con))
-                {
-                    cmd.Parameters.AddWithValue("@ID", budgetId)
-                        ;
-                    cmd.ExecuteNonQuery();
-                }
-
-                RecordRemoved?.Invoke(this, EventArgs.Empty);
-                con.Close();
-            }
-
-        }
-
-        public bool DoesBudgetIDExist(int budgetId)
-        {
-            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-                using (SqlCommand cmd = new SqlCommand("Select count(*) from BudgetLimits where BudgetID = @BudgetID", con))
-                {
-                    cmd.Parameters.AddWithValue("@BudgetID", budgetId);
-                    int count = (int)cmd.ExecuteScalar();
-                    return count > 0;
-
-                }
-
-            }
-
-
-        }
-
-        public List<BudgetLimit> SearchData(string columnName, string searchValue)
-        {
-            List<BudgetLimit> results = new List<BudgetLimit>();
-            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
-
-            if (!ValidateColumnName(columnName))
-            {
-                throw new ArgumentException("Ungültiger Spaltenname", nameof(columnName));
-            }
-            string query = $"SELECT * FROM BudgetLimits WHERE [{columnName}] LIKE @searchValue";
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Parameters.AddWithValue("@searchValue", $"%{searchValue}%");
-                    con.Open();
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var budgetLimit = new BudgetLimit()
-                            {
-                                BudgetID = reader.GetInt32(reader.GetOrdinal("BudgetID")),
-                                Budget_Amount = reader.IsDBNull(reader.GetOrdinal("Budget_Amount")) ? null : reader.GetInt32(reader.GetOrdinal("Budget_Amount")),
-                                Budget_Limit_Year = reader.IsDBNull(reader.GetOrdinal("Budget_Limit_Year")) ? null : reader.GetInt32(reader.GetOrdinal("Budget_Limit_Year")),
-                                Budget_Category = reader.IsDBNull(reader.GetOrdinal("Budget_Category")) ? null : reader.GetString(reader.GetOrdinal("Budget_Category")),
-                                Creation_Date = reader.IsDBNull(reader.GetOrdinal("Creation_Date")) ? null : (DateOnly?)DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("Creation_Date"))),
-                                Budget_Status = reader.IsDBNull(reader.GetOrdinal("Budget_Status")) ? null : reader.GetString(reader.GetOrdinal("Budget_Status")),
-                                Approved_By = reader.IsDBNull(reader.GetOrdinal("Approved_By")) ? null : reader.GetString(reader.GetOrdinal("Approved_By")),
-                                Comment = reader.IsDBNull(reader.GetOrdinal("Comment")) ? null : reader.GetString(reader.GetOrdinal("Comment")),
-                                Currency = reader.IsDBNull(reader.GetOrdinal("Currency")) ? null : reader.GetString(reader.GetOrdinal("Currency"))
-
-                            };
-                            results.Add(budgetLimit);
-                        }
-                    }
-                    con.Close();
-
+                    return cmd.ExecuteScalar()?.ToString();
                 }
             }
-            return results;
         }
+
+        // Methode zum Abrufen des Standardwerts für eine bestimmte Spalte
+        private object GetDefaultValue(string tableName, string columnName)
+        {
+            if (IsDateColumn(tableName, columnName))
+            {
+                return DateTime.Now;
+            }
+            // Weitere Logik zum Bestimmen des Standardwerts für andere Spaltentypen
+            return DBNull.Value;
+        }
+
 
         //Wenn es ohne dictionary funktioniert, anpassen
         /*
@@ -555,9 +589,6 @@ namespace FinanceManagement
                 }
             }
         }
-        private bool ValidateColumnName(string columnName)
-        {
-            return true;
-        }
+       
     }
 }

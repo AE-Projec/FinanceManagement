@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace FinanceManagement
 {
-    internal class Revenue
+    public class Revenue
     {
-        public int RevenueID { get; set; }
+        public int? RevenueID { get; set; }
         public string? TransactionType { get; set; }
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
         public string? Currency {  get; set; }
         public DateOnly? TransactionDate { get; set; }
         public string? Category { get; set; }

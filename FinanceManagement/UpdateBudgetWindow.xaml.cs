@@ -27,41 +27,23 @@ namespace FinanceManagement
         public event Action<UpdateBudgetWindow> PrevBudget;
         
 
-        public BudgetLimit budgetLimit { get; set; }
+        public BudgetLimits budgetLimit { get; set; }
 
 
-        public void ShowBudgets(BudgetLimit budgets)
+        public void ShowBudgets(BudgetLimits budgets)
         {
             budgetLimit = budgets;
-
-
 
             BudgetID.Text = $"{budgetLimit.BudgetID}";
             Budget_Amount.Text = $"{budgetLimit.Budget_Amount}";
             Currency.Text = $"{budgetLimit.Currency.Trim()}";
             Year_Limit.Text = $"{budgetLimit.Budget_Limit_Year}";
             Budget_Category.Text = $"{budgetLimit.Budget_Category}";
-            Creation_Date.Text = $"{budgetLimit.Creation_Date}";
+            Creation_Date.Text = $"{budgetLimit.Creation_Date.ToString()}";
             Budget_Status.Text = $"{budgetLimit.Budget_Status}";
             Approved_By.Text = $"{budgetLimit.Approved_By}";
             Comment.Text = $"{budgetLimit.Comment}";
             Show();
-
-
-
-
-            //BudgetID.Text = $"{budgetsWindow.BudgetId}";
-            //Budget_Amount.Text = $"{budgetsWindow.Budget_Amount}";
-            //Currency.Text = $"{budgetsWindow.Currency.ToString().Trim()}";
-            //Year_Limit.Text = $"{budgetsWindow.Budget_Limit_Year}";
-            //Budget_Category.Text = $"{budgetsWindow.Budget_Category}";
-            //Creation_Date.Text = $"{budgetsWindow.Creation_Date}";
-            //Budget_Status.Text = $"{budgetsWindow.Budget_Status}";
-            //Approved_By.Text = $"{budgetsWindow.Approved_By}";
-            //Comment.Text = $"{budgetsWindow.Comment}";
-
-
-            //Show();
         }
 
         public UpdateBudgetWindow()
@@ -91,7 +73,12 @@ namespace FinanceManagement
         public int LastUpdatedId { get; private set; }
         private void updateInDB_btn_Click(object sender, RoutedEventArgs e)
         {
-
+            //var budgetLimit = new BudgetLimit()
+            if(budgetLimit == null) 
+            {
+                budgetLimit = new BudgetLimits();
+            }
+            
             // Übertragen der UI-Änderungen in das BudgetLimit-Objekt
             if (int.TryParse(BudgetID.Text, out int budgetId))
             {
@@ -107,28 +94,33 @@ namespace FinanceManagement
                 budgetLimit.Budget_Limit_Year = yearLimit;
             }
             budgetLimit.Budget_Category = Budget_Category.Text;
-            if (DateTime.TryParse(Creation_Date.Text, out DateTime creationDate))
+
+            if (DateTime.TryParse(Creation_Date.Text.ToString(), out DateTime creationDate))
             {
-                budgetLimit.Creation_Date = DateOnly.FromDateTime(creationDate); // Annahme, dass Creation_Date vom Typ DateOnly ist
+               // budgetLimit.Creation_Date = new DateOnly(creationDate.Year, creationDate.Month, creationDate.Day);
+                DateOnly.FromDateTime(creationDate); // Annahme, dass Creation_Date vom Typ DateOnly ist
             }
+            //budgetLimit.Creation_Date = DateOnly.FromDateTime(Creation_Date.Text);
+
             budgetLimit.Budget_Status = Budget_Status.Text;
             budgetLimit.Approved_By = Approved_By.Text;
             budgetLimit.Comment = Comment.Text;
-           // UpdateBudgetWindow editBudget = new UpdateBudgetWindow();
+            // UpdateBudgetWindow editBudget = new UpdateBudgetWindow();
 
-          //  BudgetsWindow budgets = new BudgetsWindow();
+            //  BudgetsWindow budgets = new BudgetsWindow();
 
 
-           // var dataG = budgets.budgetsDataGrid;
+            // var dataG = budgets.budgetsDataGrid;
             //dataG.SelectedIndex = budgetId;/*
-           // budgetId = dataG.SelectedIndex;
+            // budgetId = dataG.SelectedIndex;
 
 
 
 
             // Aktualisieren der Daten in der Datenbank
-            db.UpdateData(budgetLimit);
-            LastUpdatedId = budgetId;
+            db.UpdateData("BudgetLimits", budgetLimit);
+           // db.UpdateData(budgetLimit);
+            //LastUpdatedId = budgetId;
             DataUpdated?.Invoke(this, EventArgs.Empty);
             MessageBox.Show("Datensatz/ Datensätze Aktualisiert");
         

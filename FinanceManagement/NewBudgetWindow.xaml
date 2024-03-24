@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:userControls="clr-namespace:FinanceManagement.View.UserControls"
         Title="NewBudgetWindow" Height="500" Width="500">
-    <Grid Grid.Column="1" Background="LightGray">
+    <Grid Grid.Column="1" Background="White">
         <!-- Weitere Row Def hinzufügen für mehr felder-->
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -31,24 +31,8 @@
         <userControls:ClearableTextBox Grid.Row="5" Width="450" Height="30" Placeholder="Status z.b: Genehmigt (Optional)" x:Name="Budget_Status" />
         <userControls:ClearableTextBox Grid.Row="6" Width="450" Height="30" Placeholder="Genehmigt von z.b: Firma/Person (Optional)" x:Name="Approved_By" />
         <userControls:ClearableTextBox Grid.Row="7" Width="450" Height="30" Placeholder="Kommentar z.b: Für Idee (Optional)" x:Name="Comment"/> 
-
-        <!--<DatePicker x:Name="datePicker" Grid.Row="4" Width="450" Height="30" FontSize="19" GotFocus="datePicker_GotFocus"/> -->
-
-        <!--  <DatePicker x:Name="datePicker" Grid.Row="4" Width="450" Height="30" FontSize="19">
-            <DatePicker.Resources>
-                <Style TargetType="DatePickerTextBox">
-                    <Setter Property="IsReadOnly" Value="True"/>
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DatePickerTextBox_PreviewMouseLeftButtonDown"/>
-                </Style>
-                <Style TargetType="Calendar">
-                    <Setter Property="Width" Value="300"/>
-                    <Setter Property="Height" Value="300"/>
-                </Style>
-            </DatePicker.Resources>
-        </DatePicker>-->
         <Button Content="Hinzufügen" x:Name="insertIntoDB_btn"  Grid.Row="8"  Width="100" Height="30" Click="Button_InserIntoDB_Click" />
         <Button Content="Schließen" x:Name="close_btn"  Grid.Row="8"  Width="100" Height="30" Click="close_btn_Click" Margin="350,0,0,0"/> 
-        <!-- Hauptinhaltsbereich -->
 
     </Grid>
  

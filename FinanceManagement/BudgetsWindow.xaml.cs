@@ -46,6 +46,7 @@ namespace FinanceManagement
         }
         public void ReloadData()
         {
+            
             dB.ReadData(budgetsDataGrid);
         }
 
@@ -90,7 +91,7 @@ namespace FinanceManagement
             budgetsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
             budgetsDataGrid.CommitEdit();
 
-            var data = dB.ReadData<BudgetLimit>("BudgetLimits");
+            var data = dB.ReadData<BudgetLimits>("BudgetLimits");
             budgetsDataGrid.ItemsSource = data;
 
         }
@@ -128,7 +129,7 @@ namespace FinanceManagement
             {
                 budgetsDataGrid.SelectedIndex -= 1;
             }
-            var budget = budgetsDataGrid.SelectedItem as BudgetLimit;
+            var budget = budgetsDataGrid.SelectedItem as BudgetLimits;
             deleteBudget.ShowBudgets(budget);
 
         }
@@ -139,7 +140,7 @@ namespace FinanceManagement
             {
                 budgetsDataGrid.SelectedIndex += 1;
             }
-            var budget = budgetsDataGrid.SelectedItem as BudgetLimit;
+            var budget = budgetsDataGrid.SelectedItem as BudgetLimits;
             deleteBudget.ShowBudgets(budget);
 
         }
@@ -148,7 +149,7 @@ namespace FinanceManagement
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
-            var budget = row.DataContext as BudgetLimit;
+            var budget = row.DataContext as BudgetLimits;
             var editBudget = new UpdateBudgetWindow();
             editBudget.PrevBudget += EditBudget_PrevBudget;
             editBudget.NextBudget += EditBudget_NextBudget;
@@ -176,9 +177,12 @@ namespace FinanceManagement
 
         }
         //setzt den fokus auf die ID die aktualisiert wurde
+        
         private void SetFocusOnUpdatedItem(int updatedId)
         {
-            var itemToSelect = budgetsDataGrid.Items.Cast<BudgetLimit>().FirstOrDefault(item => item.BudgetID == updatedId);
+            var itemToSelect = budgetsDataGrid.Items.OfType<FinanceManagement.BudgetLimits>().FirstOrDefault(
+                item => item.BudgetID == updatedId);
+           // var itemToSelect = budgetsDataGrid.Items.Cast<BudgetLimits>().FirstOrDefault(item => item.BudgetID == updatedId);
             if (itemToSelect != null)
             {
                 budgetsDataGrid.SelectedItem = itemToSelect;
@@ -192,7 +196,7 @@ namespace FinanceManagement
                 budgetsDataGrid.SelectedIndex -= 1;
 
             }
-            var budget = budgetsDataGrid.SelectedItem as BudgetLimit;
+            var budget = budgetsDataGrid.SelectedItem as BudgetLimits;
             editBudget.ShowBudgets(budget);
         }
 
@@ -202,7 +206,7 @@ namespace FinanceManagement
             {
                 budgetsDataGrid.SelectedIndex += 1;
             }
-            var budget = budgetsDataGrid.SelectedItem as BudgetLimit;
+            var budget = budgetsDataGrid.SelectedItem as BudgetLimits;
             editBudget.ShowBudgets(budget);
 
         }
@@ -223,7 +227,7 @@ namespace FinanceManagement
             budgetsDataGrid.SelectedIndex = 0;
             editBudget.PrevBudget += EditBudget_PrevBudget;
             editBudget.NextBudget += EditBudget_NextBudget;
-            var firstBudget = dB.GetFirstBudgetEntry();
+            var firstBudget = dB.ReadFirstEntry<BudgetLimits>("BudgetLimits");
             editBudget.Owner = this;
 
             if (firstBudget != null)

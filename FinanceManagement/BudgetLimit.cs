@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FinanceManagement
 {
-    public class BudgetLimit
+    public class BudgetLimits
     {
         public int? BudgetID { get; set; }
         public int? Budget_Amount { get; set; }

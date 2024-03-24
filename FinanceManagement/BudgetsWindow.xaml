@@ -48,7 +48,7 @@
                 <!-- Weitere Navigationsbuttons -->
             </StackPanel>
 
-            <Grid Grid.Column="1" Background="LightGray">
+            <Grid Grid.Column="1" Background="White">
                 <!-- Hauptinhalt-->
                 <Grid>
                     <Grid.RowDefinitions>

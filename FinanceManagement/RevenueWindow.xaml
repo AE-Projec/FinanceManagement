@@ -31,12 +31,14 @@
             <StackPanel Grid.Column="0" Background="#FF2D2D30">
                 <Button Foreground="White" Background="Transparent" Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" Click="Button_Add_New_Revenue_Click">
                     <Button.Content >
-                        <TextBlock Text="Neue Einnahme hinzufügen" TextWrapping="Wrap"/>
+                        <TextBlock Text="Neue Einnahmen hinzufügen" TextWrapping="Wrap"/>
                     </Button.Content>
                 </Button>
-                <Button Content="Einnahme Entfernen" Foreground="White" Background="Transparent" 
-                        Padding="10" BorderThickness="0" HorizontalContentAlignment="Left" 
-                        Click="Button_Delete_Revenue_Click"/>
+                <Button x:Name="deleteRevenueBtn" Click="Button_Delete_Revenue_Click">
+                    <Button.Content>
+                        <TextBlock Text="Einnahmen Löschen" TextWrapping="Wrap"/>
+                    </Button.Content>
+                </Button>
                 <Button x:Name="updateRevenueBtn" Click="updateRevenueBtn_Click">
                     <Button.Content>
                         <TextBlock Text="Einnahmen Aktualisieren" TextWrapping="Wrap"/>
@@ -49,7 +51,7 @@
                 <!-- Weitere Navigationsbuttons -->
             </StackPanel>
 
-            <Grid Grid.Column="1" Background="LightGray">
+            <Grid Grid.Column="1" Background="White">
                 <!-- Hauptinhalt-->
                 <Grid>
                     <Grid.RowDefinitions>

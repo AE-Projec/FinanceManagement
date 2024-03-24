@@ -28,60 +28,51 @@ namespace FinanceManagement
         public NewBudgetWindow()
         {
             InitializeComponent();
-            
+
             dB.RecordAdded += DB_RecordAdded;
 
             this.Loaded += NewBudgetWindow_Loaded;
-            
-            //Budget_Amount.TextChanged += (s, e) => UpdateButtonVisibility();
-          //  Currency.TextChanged += (s, e) => UpdateButtonVisibility();
 
         }
 
-
+        //liest die Daten erneut aus um sie direkt anzeigen zu können.
         private void DB_RecordAdded(object? sender, EventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
-                dB.ReadData();
+                dB.ReadData<BudgetLimits>("BudgetLimits");
             });
 
         }
 
         private void NewBudgetWindow_Loaded(object sender, RoutedEventArgs e)
         {
-           UpdateButtonVisibility();
+            UpdateButtonVisibility();
         }
 
         private void Button_InserIntoDB_Click(object sender, RoutedEventArgs e)
         {
+            
+            var budget = new BudgetLimits
+            {
+                Budget_Amount = int.Parse(Budget_Amount.Text),
+                Currency = Currency.Text,
+                Budget_Limit_Year = string.IsNullOrEmpty(Year_Limit.Text) ? null : int.Parse(Year_Limit.Text),
+                Budget_Category = Budget_Category.Text,
+                Creation_Date = string.IsNullOrEmpty(Creation_Date.Text) ? null : DateOnly.Parse(Creation_Date.Text),
+                Budget_Status = Budget_Status.Text,
+                Approved_By = Approved_By.Text,
+                Comment = Comment.Text
+            
+            };
 
-           string budgetAmount = Budget_Amount.Text;
-
-            bool isYearLimitParseSuccessful = int.TryParse(Year_Limit.Text, out int yearLimit);
-            if (!isYearLimitParseSuccessful)
-           {
-
-               yearLimit = 0;
-           }
-
-            string budgetCategory = Budget_Category.Text;
-         
-
-            string creationDateString = Creation_Date.Text;
-            string budgetStatus = Budget_Status.Text;
-            string approvedBy = Approved_By.Text;
-            string comment = Comment.Text;
-            string currency = Currency.Text;
-           
-            dB.InsertData(budgetAmount, yearLimit, budgetCategory, creationDateString, budgetStatus, approvedBy, comment, currency);
+            dB.InsertIntoData("BudgetLimits", budget);
 
             MessageBox.Show("Ein neuer Datensatz wurde hinzugefügt!");
 
             this.Close();
-
-
         }
+
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
@@ -89,7 +80,6 @@ namespace FinanceManagement
         }
 
         //Pflichtangaben
-      
         private void UpdateButtonVisibility()
         {
 
@@ -112,15 +102,15 @@ namespace FinanceManagement
             Close();
         }
 
-        
+
         private bool IsBudgetAmountValid()
         {
-           return int.TryParse(Budget_Amount.Text, out _);
+            return int.TryParse(Budget_Amount.Text, out _);
         }
-        
+
         private void Budget_Amount_TextChanged(object sender, TextChangedEventArgs e)
         {
-            
+
             if (!IsBudgetAmountValid() && !string.IsNullOrWhiteSpace(Budget_Amount.Text))
             {
                 Budget_Amount_Label.Content = "Ihr eingegebener Wert ist keine Zahl";
@@ -131,7 +121,7 @@ namespace FinanceManagement
             }
             UpdateButtonVisibility();
         }
-        
+
         private bool IsCurrencyValid()
         {
             return Currency.Text.Length <= 3;
@@ -150,21 +140,5 @@ namespace FinanceManagement
             }
             UpdateButtonVisibility();
         }
-
-        /*
-        private void DatePickerTextBox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DatePickerTextBox datePickerTextBox = new DatePickerTextBox();
-            if (datePickerTextBox != null)
-            {
-                if (!datePicker.IsDropDownOpen)
-                {
-                    datePicker.IsDropDownOpen = true;
-                    e.Handled = true;
-                }
-        
-    }
-
-    }*/
     }
 }
