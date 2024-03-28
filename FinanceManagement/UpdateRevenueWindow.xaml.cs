@@ -60,7 +60,7 @@ namespace FinanceManagement
                 revenue = new Revenue();
             }
 
-            // Übertragen der UI-Änderungen in das BudgetLimit-Objekt
+            // Übertragen der UI-Änderungen in das Revenue-Objekt
             if (int.TryParse(RevenueID.Text, out int revenueId))
             {
                 revenue.RevenueID = revenueId;

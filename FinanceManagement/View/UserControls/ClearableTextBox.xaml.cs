@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,40 +40,44 @@ namespace FinanceManagement.View.UserControls
 
         public string Placeholder
         {
-            get 
+            get
             {
-                return placeholder; 
+                return placeholder;
             }
-            set 
-            { 
+            set
+            {
                 placeholder = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Placeholder"));
-               // tbPlaceholder.Text = placeholder;
+                // tbPlaceholder.Text = placeholder;
             }
         }
-        
+
 
         public string Text
         {
-            get 
-            { 
+            get
+            {
                 return txtInput.Text;
             }
-            set 
-            { 
-                if(DateTime.TryParse(value, out DateTime dateValue)) 
+            set
+            {
+                if (DateTime.TryParse(value, out DateTime dateValue))
                 {
                     txtInput.Text = dateValue.ToString("dd.MM.yyyy");
+                }
+                else if(double.TryParse(value, out _))
+                {
+                    txtInput.Text = value;
                 }
                 else
                 {
                     txtInput.Text = value;
                 }
-                
+
             }
         }
 
-        
+
         public event TextChangedEventHandler TextChanged
         {
             add
@@ -86,15 +91,15 @@ namespace FinanceManagement.View.UserControls
         }
         private void txtInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(string.IsNullOrEmpty(txtInput.Text))
+            if (string.IsNullOrEmpty(txtInput.Text))
             {
                 tbPlaceholder.Visibility = Visibility.Visible;
-                
+
             }
             else
             {
                 tbPlaceholder.Visibility = Visibility.Hidden;
-                
+
             }
         }
     }

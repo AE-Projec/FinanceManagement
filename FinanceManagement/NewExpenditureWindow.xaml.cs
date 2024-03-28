@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,71 +17,40 @@ using System.Windows.Shapes;
 namespace FinanceManagement
 {
     /// <summary>
-    /// Interaktionslogik für NewRevenueWindow.xaml
+    /// Interaktionslogik für NewExpenditureWindow.xaml
     /// </summary>
-    public partial class NewRevenueWindow : Window
+    public partial class NewExpenditureWindow : Window
     {
         DB dB = new DB();
-        public NewRevenueWindow()
+        public NewExpenditureWindow()
         {
             InitializeComponent();
             dB.RecordAdded += DB_RecordAdded;
-            this.Loaded += NewRevenueWindow_Loaded;
+            this.Loaded += NewExpenditureWindow_Loaded;
         }
 
-        private void NewRevenueWindow_Loaded(object sender, RoutedEventArgs e)
+        private void NewExpenditureWindow_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateButtonVisibility();
-            
         }
-        
+
         private void DB_RecordAdded(object? sender, EventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
-                dB.ReadData<Revenue>("Revenue");
+                dB.ReadData<Expenditure>("Expenditure");
             });
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            base.OnClosed(e);   
+            base.OnClosed(e);
             dB.RecordAdded -= DB_RecordAdded;
-        }
-
-
-        private void insertIntoDB_btn_Click(object sender, RoutedEventArgs e)
-        {
-            var revenue = new Revenue
-            {
-                Amount = decimal.Parse(Amount.Text),
-                Currency = Currency.Text,
-                TransactionDate = string.IsNullOrEmpty(TransactionDate.Text) ? null : DateTime.ParseExact(TransactionDate.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture),
-                Category =  Category.Text,
-                Description = Description.Text,
-                PaymentMethod = PaymentMethod.Text,
-                TransactionType = TransactionType.Text,
-            };
-
-            dB.InsertIntoData("Revenue", revenue);
-
-            MessageBox.Show("Ein neuer Datensatz wurde hinzugefügt!");
-
-            this.Close();
-        }
-
-        private void close_btn_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-        private bool IsRevenueAmountValid()
-        {
-            return decimal.TryParse(Amount.Text, out _);
         }
 
         private void Amount_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!IsRevenueAmountValid() && !string.IsNullOrWhiteSpace(Amount.Text))
+            if(!IsExpenditureAmountValid() && !string.IsNullOrEmpty(Amount.Text))
             {
                 amountLabel.Content = "Ihr eingegebener Wert ist keine Zahl";
             }
@@ -90,13 +60,33 @@ namespace FinanceManagement
             }
             UpdateButtonVisibility();
         }
-        private bool IsCurrencyValid()
+
+        private void insertIntoDB_btn_Click(object sender, RoutedEventArgs e)
         {
-            return Currency.Text.Length <= 3;
+            var expenditure = new Expenditure
+            {
+                Amount = decimal.Parse(Amount.Text),
+                Currency = Currency.Text,
+                TransactionType = TransactionType.Text,
+                TransactionDate = string.IsNullOrEmpty(TransactionDate.Text) ? null : DateTime.ParseExact(TransactionDate.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture),
+                Category = Category.Text,
+                PaymentMethod = PaymentMethod.Text,
+                TransactionDescription = Description.Text,
+                Vendor = Vendor.Text
+            };
+
+            dB.InsertIntoData<Expenditure>("Expenditure", expenditure);
+            MessageBox.Show("Ein neuer Datensatz wurde hinzugefügt!");
+            this.Close();
+        }
+
+        private void close_btn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
         private void Currency_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!IsCurrencyValid()&&!string.IsNullOrWhiteSpace(Currency.Text))
+            if (!IsCurrencyValid() && !string.IsNullOrEmpty(Currency.Text))
             {
                 currencyLabel.Content = "Ihre Währungseingabe ist zu lang";
             }
@@ -107,14 +97,21 @@ namespace FinanceManagement
             UpdateButtonVisibility();
         }
 
+        private bool IsExpenditureAmountValid()
+        {
+            return decimal.TryParse(Amount.Text, out _);
+        }
+        private bool IsCurrencyValid()
+        {
+            return Currency.Text.Length <= 3;
+        }
 
         private void UpdateButtonVisibility()
         {
-
             if (string.IsNullOrEmpty(Amount.Text) ||
                 string.IsNullOrEmpty(Currency.Text) ||
-                !IsRevenueAmountValid() ||
-                !IsCurrencyValid())
+                    !IsExpenditureAmountValid() ||
+                    !IsCurrencyValid())
             {
                 insertIntoDB_btn.Visibility = Visibility.Hidden;
             }
@@ -122,6 +119,11 @@ namespace FinanceManagement
             {
                 insertIntoDB_btn.Visibility = Visibility.Visible;
             }
+        }
+
+        private void TransactionType_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

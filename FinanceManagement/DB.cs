@@ -222,7 +222,7 @@ namespace FinanceManagement
                             DateTime? dateValue = null;
                             if (IsDateColumn(tableName, col))
                             {
-                                DateTime? dateOnlyValue = (DateTime)prop.GetValue(item);
+                                DateTime? dateOnlyValue = (DateTime?)prop.GetValue(item);
                                 if (dateOnlyValue.HasValue)
                                 {
                                     dateValue = new DateTime(dateOnlyValue.Value.Year, dateOnlyValue.Value.Month, dateOnlyValue.Value.Day);

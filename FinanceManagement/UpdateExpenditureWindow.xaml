@@ -1,0 +1,61 @@
+﻿<Window x:Class="FinanceManagement.UpdateExpenditureWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinanceManagement"
+        xmlns:userControls="clr-namespace:FinanceManagement.View.UserControls"
+        mc:Ignorable="d"
+        Title="UpdateExpenditureWindow" Height="500" Width="500">
+    <StackPanel Orientation="Vertical" Margin="0,30,0,0">
+        <Grid Grid.Column="1" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Label Content="ID" Grid.Row="0" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Transaktionsart" Grid.Row="1" VerticalAlignment="Center" Height="30" Margin="0,0,410,10" />
+            <Label Content="Betrag" Grid.Row="2" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Währung" Grid.Row="3" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Transakt.datum" Grid.Row="4" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Kategorie" Grid.Row="5" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Beschreibung" Grid.Row="6" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Zahl.methode" Grid.Row="7" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+            <Label Content="Verkäufer" Grid.Row="8" VerticalAlignment="Center" Height="30" Margin="0,0,410,10"/>
+
+            <userControls:ClearableTextBox Grid.Row="0" Width="400" Height="30" Placeholder="ID" x:Name="ExpenditureID" Foreground="Black" Margin="80,0,0,10" IsEnabled="False"/>
+            <userControls:ClearableTextBox Grid.Row="1" Width="400" Height="30" Placeholder="Transaktionsart" x:Name="TransactionType" Foreground="Black" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="2" Width="400" Height="30" Placeholder="Betrag" x:Name="Amount" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="3" Width="400" Height="30" Placeholder="Währung" x:Name="Currency" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="4" Width="400" Height="30" Placeholder="Transaktionsdatum" x:Name="TransactionDate" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="5" Width="400" Height="30" Placeholder="Kategorie" x:Name="Category" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="6" Width="400" Height="30" Placeholder="Beschreibung" x:Name="Description" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="7" Width="400" Height="30" Placeholder="Zahlungsmethode" x:Name="PaymentMethod" Margin="80,0,0,10"/>
+            <userControls:ClearableTextBox Grid.Row="8" Width="400" Height="30" Placeholder="Verkäufer" x:Name="Vendor" Margin="80,0,0,10"/>
+            <Button Content="Aktualisieren" x:Name="updateInDB_btn"  Grid.Row="9"  Width="80" Height="30" Margin="200,10,0,20" Click="updateInDB_btn_Click"/>
+            <Button Content="Schließen" x:Name="cancel_btn"  Grid.Row="9"  Width="80" Height="30" Margin="400,10,0,20" Click="cancel_btn_Click"/>
+            <Button x:Name="previousEntry_btn"  Grid.Row="9"  Width="50" Height="30" Margin="0,0,270,10" Click="previousEntry_btn_Click">
+                <Button.Content>
+                    <TextBlock Text="←" FontSize="40" VerticalAlignment="Center" Margin="0,-10,0,0"/>
+                </Button.Content>
+            </Button>
+            <Button x:Name="nextEntry_btn"  Grid.Row="9"  Width="50" Height="30" Margin="120,10,280,20" Click="nextEntry_btn_Click">
+                <Button.Content>
+                    <TextBlock Text="→" FontSize="40" VerticalAlignment="Center" Margin="0,-10,0,0"/>
+                </Button.Content>
+            </Button>
+        </Grid>
+    </StackPanel>
+</Window>
+

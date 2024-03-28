@@ -91,8 +91,6 @@ namespace FinanceManagement
             var deleteRevenue = new DeleteRevenueWindow();
             var row = sender as DataGridRow;
 
-           
-
             var blurEffect = new System.Windows.Media.Effects.BlurEffect();
             blurEffect.Radius = 5;
             Effect = blurEffect;
@@ -184,6 +182,7 @@ namespace FinanceManagement
             editRevenue.DataUpdated += (sender, e) =>
             {
                 RefreshDataGrid();
+                SetFocusOnUpdatedItem(editRevenue.LastUpdatedId);
             };
 
             //hebt den fokus auf nach dem schließen des fensters
@@ -202,9 +201,8 @@ namespace FinanceManagement
         //setzt den fokus auf die ID die aktualisiert wurde
         private void SetFocusOnUpdatedItem(int updatedId)
         {
-            var itemToSelect = RevenuesDataGrid.Items.OfType<FinanceManagement.Revenue>().FirstOrDefault(
+            var itemToSelect = RevenuesDataGrid.Items.OfType<Revenue>().FirstOrDefault(
                 item => item.RevenueID == updatedId);
-            // var itemToSelect = budgetsDataGrid.Items.Cast<BudgetLimits>().FirstOrDefault(item => item.BudgetID == updatedId);
             if (itemToSelect != null)
             {
                 RevenuesDataGrid.SelectedItem = itemToSelect;

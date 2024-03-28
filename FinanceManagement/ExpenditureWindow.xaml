@@ -34,12 +34,12 @@
                         <TextBlock Text="Neue Ausgaben hinzufügen" TextWrapping="Wrap"/>
                     </Button.Content>
                 </Button>
-                <Button x:Name="deleteRevenueBtn" Click="Button_Delete_Revenue_Click">
+                <Button x:Name="deleteExpenditureBtn" Click="deleteExpenditureBtn_Click">
                     <Button.Content>
                         <TextBlock Text="Ausgaben Löschen" TextWrapping="Wrap"/>
                     </Button.Content>
                 </Button>
-                <Button x:Name="updateRevenueBtn" Click="updateRevenueBtn_Click">
+                <Button x:Name="updateExpenditureBtn" Click="updateExpenditureBtn_Click">
                     <Button.Content>
                         <TextBlock Text="Ausgaben Aktualisieren" TextWrapping="Wrap"/>
                     </Button.Content>
@@ -59,14 +59,14 @@
                     </Grid.RowDefinitions>
                 </Grid>
 
-                <DataGrid x:Name="RevenuesDataGrid" AutoGenerateColumns="False">
+                <DataGrid x:Name="ExpenditureDataGrid" AutoGenerateColumns="False">
                     <DataGrid.Resources>
                         <Style TargetType="DataGridRow">
                             <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
                         </Style>
                     </DataGrid.Resources>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Einnahmen ID" Binding="{Binding RevenueID}" x:Name="RevenueId"/>
+                        <DataGridTextColumn Header="Ausgaben ID" Binding="{Binding ExpenditureID}" x:Name="ExpenditureId"/>
                         <DataGridTextColumn Header="Betrag" Binding="{Binding Amount}" x:Name="Amount"/>
                         <DataGridTextColumn Header="Währung" Binding="{Binding Currency}" x:Name="Currency"/>
                         <DataGridTextColumn Header="Transaktionsart" Binding="{Binding TransactionType}" x:Name="TransactionType"/>
