@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,6 @@ namespace FinanceManagement
 
         public event Action<UpdateBudgetWindow> NextBudget;
         public event Action<UpdateBudgetWindow> PrevBudget;
-        
 
         public BudgetLimits budgetLimit { get; set; }
 
@@ -52,13 +52,10 @@ namespace FinanceManagement
 
         }
 
-
-
         private void cancel_btn_Click(object sender, RoutedEventArgs e)
         {
 
             Close();
-
         }
 
         private void previousEntry_btn_Click(object sender, RoutedEventArgs e)
@@ -73,7 +70,7 @@ namespace FinanceManagement
         public int LastUpdatedId { get; private set; }
         private void updateInDB_btn_Click(object sender, RoutedEventArgs e)
         {
-            //var budgetLimit = new BudgetLimit()
+
             if(budgetLimit == null) 
             {
                 budgetLimit = new BudgetLimits();
@@ -97,30 +94,20 @@ namespace FinanceManagement
 
             if (DateTime.TryParse(Creation_Date.Text.ToString(), out DateTime creationDate))
             {
-               // budgetLimit.Creation_Date = new DateOnly(creationDate.Year, creationDate.Month, creationDate.Day);
-                DateOnly.FromDateTime(creationDate); // Annahme, dass Creation_Date vom Typ DateOnly ist
+                // budgetLimit.Creation_Date = DateOnly.FromDateTime(creationDate);
+                budgetLimit.Creation_Date = creationDate.Date;
+               //DateOnly.FromDateTime(creationDate);
             }
-            //budgetLimit.Creation_Date = DateOnly.FromDateTime(Creation_Date.Text);
-
             budgetLimit.Budget_Status = Budget_Status.Text;
             budgetLimit.Approved_By = Approved_By.Text;
             budgetLimit.Comment = Comment.Text;
-            // UpdateBudgetWindow editBudget = new UpdateBudgetWindow();
-
-            //  BudgetsWindow budgets = new BudgetsWindow();
-
-
-            // var dataG = budgets.budgetsDataGrid;
-            //dataG.SelectedIndex = budgetId;/*
-            // budgetId = dataG.SelectedIndex;
-
-
-
 
             // Aktualisieren der Daten in der Datenbank
-            db.UpdateData("BudgetLimits", budgetLimit);
-           // db.UpdateData(budgetLimit);
-            //LastUpdatedId = budgetId;
+            db.UpdateData<BudgetLimits>("BudgetLimits", budgetLimit);
+
+            LastUpdatedId = (int)budgetLimit.BudgetID; // setzt fokus auf letzte ID die aktualsiert wurde
+            
+            
             DataUpdated?.Invoke(this, EventArgs.Empty);
             MessageBox.Show("Datensatz/ Datensätze Aktualisiert");
         

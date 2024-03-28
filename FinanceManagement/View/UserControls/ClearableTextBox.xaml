@@ -9,7 +9,8 @@
     <Grid Background="White">
         <TextBox x:Name="txtInput" VerticalAlignment="Center"
                  FontSize="16" FontWeight="Light" Height="30" Background="Transparent"
-                 TextChanged="txtInput_TextChanged"/>
+                 TextChanged="txtInput_TextChanged"
+                 Text="{Binding Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, StringFormat='dd.MM.yyyy'}"/>
         <TextBlock x:Name="tbPlaceholder" Text="{Binding Placeholder}" FontSize="16" FontWeight="Light"
                    Foreground="DarkGray" VerticalAlignment="Center" Margin="1" 
                    Height="30" Panel.ZIndex="-1" Background="White"/>

@@ -67,10 +67,10 @@
                     </DataGrid.Resources>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Einnahmen ID" Binding="{Binding RevenueID}" x:Name="RevenueId"/>
-                        <DataGridTextColumn Header="Transaktionsart" Binding="{Binding TransactionType}" x:Name="TransactionType"/>
                         <DataGridTextColumn Header="Betrag" Binding="{Binding Amount}" x:Name="Amount"/>
                         <DataGridTextColumn Header="Währung" Binding="{Binding Currency}" x:Name="Currency"/>
-                        <DataGridTextColumn Header="Transaktionsdatum" Binding="{Binding TransactionDate}" x:Name="TransactionDate"/>
+                        <DataGridTextColumn Header="Transaktionsart" Binding="{Binding TransactionType}" x:Name="TransactionType"/>
+                        <DataGridTextColumn Header="Transaktionsdatum" Binding="{Binding TransactionDate, StringFormat=\{0:dd.MM.yyyy\}}" x:Name="TransactionDate"/>
                         <DataGridTextColumn Header="Kategorie" Binding="{Binding Category}" x:Name="Category"/>
                         <DataGridTextColumn Header="Beschreibung" Binding="{Binding Description}" x:Name="Description"/>
                         <DataGridTextColumn Header="Zahlungsmethode" Binding="{Binding PaymentMethod }" x:Name="PaymentMethod"/>

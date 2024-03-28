@@ -46,8 +46,7 @@ namespace FinanceManagement
         }
         public void ReloadData()
         {
-            
-            dB.ReadData(budgetsDataGrid);
+            dB.ReadData<BudgetLimits>(budgetsDataGrid);
         }
 
         void OpenCustomDialog()
@@ -87,7 +86,7 @@ namespace FinanceManagement
 
         public void RefreshDataGrid()
         {
-           
+
             budgetsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
             budgetsDataGrid.CommitEdit();
 
@@ -118,8 +117,6 @@ namespace FinanceManagement
             deleteBudget.ShowDialog();
 
             this.Effect = null;
-
-
 
         }
 
@@ -161,7 +158,7 @@ namespace FinanceManagement
             {
                 RefreshDataGrid();
 
-                //SetFocusOnUpdatedItem(editBudget.LastUpdatedId);
+                SetFocusOnUpdatedItem(editBudget.LastUpdatedId);
 
             };
 
@@ -177,24 +174,32 @@ namespace FinanceManagement
 
         }
         //setzt den fokus auf die ID die aktualisiert wurde
-        
-        private void SetFocusOnUpdatedItem(int updatedId)
+        public void SetFocusOnUpdatedItem(int updatedId)
         {
-            var itemToSelect = budgetsDataGrid.Items.OfType<FinanceManagement.BudgetLimits>().FirstOrDefault(
-                item => item.BudgetID == updatedId);
-           // var itemToSelect = budgetsDataGrid.Items.Cast<BudgetLimits>().FirstOrDefault(item => item.BudgetID == updatedId);
+
+            foreach (var item in budgetsDataGrid.Items)
+            {
+                if (item is BudgetLimits budget && budget.BudgetID == updatedId)
+                {
+                    budgetsDataGrid.SelectedItem = item;
+                    budgetsDataGrid.ScrollIntoView(item);
+                    break;
+                }
+            }
+
+            var itemToSelect = budgetsDataGrid.Items.OfType<BudgetLimits>().FirstOrDefault(item => item.BudgetID == updatedId);
             if (itemToSelect != null)
             {
                 budgetsDataGrid.SelectedItem = itemToSelect;
                 budgetsDataGrid.ScrollIntoView(itemToSelect);
             }
+
         }
         private void EditBudget_PrevBudget(UpdateBudgetWindow editBudget)
         {
             if (budgetsDataGrid.SelectedIndex > 0)
             {
                 budgetsDataGrid.SelectedIndex -= 1;
-
             }
             var budget = budgetsDataGrid.SelectedItem as BudgetLimits;
             editBudget.ShowBudgets(budget);
@@ -202,13 +207,13 @@ namespace FinanceManagement
 
         private void EditBudget_NextBudget(UpdateBudgetWindow editBudget)
         {
+
             if (budgetsDataGrid.SelectedIndex + 1 < budgetsDataGrid.Items.Count - 1)
             {
                 budgetsDataGrid.SelectedIndex += 1;
             }
             var budget = budgetsDataGrid.SelectedItem as BudgetLimits;
             editBudget.ShowBudgets(budget);
-
         }
 
         private void backBtn_Click(object sender, RoutedEventArgs e)

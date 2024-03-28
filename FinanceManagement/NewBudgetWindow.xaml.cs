@@ -28,11 +28,8 @@ namespace FinanceManagement
         public NewBudgetWindow()
         {
             InitializeComponent();
-
             dB.RecordAdded += DB_RecordAdded;
-
             this.Loaded += NewBudgetWindow_Loaded;
-
         }
 
         //liest die Daten erneut aus um sie direkt anzeigen zu können.
@@ -48,6 +45,7 @@ namespace FinanceManagement
         private void NewBudgetWindow_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateButtonVisibility();
+           
         }
 
         private void Button_InserIntoDB_Click(object sender, RoutedEventArgs e)
@@ -59,7 +57,8 @@ namespace FinanceManagement
                 Currency = Currency.Text,
                 Budget_Limit_Year = string.IsNullOrEmpty(Year_Limit.Text) ? null : int.Parse(Year_Limit.Text),
                 Budget_Category = Budget_Category.Text,
-                Creation_Date = string.IsNullOrEmpty(Creation_Date.Text) ? null : DateOnly.Parse(Creation_Date.Text),
+                Creation_Date = string.IsNullOrEmpty(Creation_Date.Text) ? null : DateTime.ParseExact(Creation_Date.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture),
+                //  Creation_Date = string.IsNullOrEmpty(Creation_Date.Text) ? null : DateTime.Parse(Creation_Date.Text), //vorher dateOnly
                 Budget_Status = Budget_Status.Text,
                 Approved_By = Approved_By.Text,
                 Comment = Comment.Text

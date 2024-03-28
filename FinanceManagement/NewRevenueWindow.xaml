@@ -21,14 +21,16 @@
         </Grid.RowDefinitions>
         <Label Content="" x:Name="Revenue_Amount_Label" Margin="0,35,0,-5" HorizontalAlignment="Center" FontSize="10"/>
         <Label Content="" x:Name="Currency_Length" Grid.Row="1" Margin="0,35,0,-5" HorizontalAlignment="Center" FontSize="10"/>
-
-        <userControls:ClearableTextBox Grid.Row="0" Width="450" Height="30" Placeholder="Betrag" x:Name="Amount" TextChanged="Amount_TextChanged" />
-        <userControls:ClearableTextBox Grid.Row="1" Width="450" Height="30" Placeholder="Währung z.b: €" x:Name="Currency"/>
-        <userControls:ClearableTextBox Grid.Row="2" Width="450" Height="30" Placeholder="Transaktionsdatum" x:Name="TransactionDate"/>
-        <userControls:ClearableTextBox Grid.Row="3" Width="450" Height="30" Placeholder="Transaktionstyp z.b: Zinsen/Miete/Verkauf" x:Name="TransactionType" Foreground="Black" TextChanged="TransactionType_TextChanged"/>
-        <userControls:ClearableTextBox Grid.Row="4" Width="450" Height="30" Placeholder="Kategorie z.b IT(Informationstechnik)" x:Name="Category"/>
+        
+        <userControls:ClearableTextBox Grid.Row="0" Width="450" Height="30" Placeholder="Betrag (Dezimalwert z.b 100,50) Pflichtangabe" x:Name="Amount" TextChanged="Amount_TextChanged" />
+        <Label x:Name="amountLabel" Content="" Grid.Row="0" Height="25" Width="350" Margin="0,40,0,0"/>
+        <userControls:ClearableTextBox Grid.Row="1" Width="450" Height="30" Placeholder="Währung z.b: € (Pflichtangabe)" x:Name="Currency" TextChanged="Currency_TextChanged"/>
+        <Label x:Name="currencyLabel" Content="" Grid.Row="1" Height="25" Width="350" Margin="0,40,0,0"/>
+        <userControls:ClearableTextBox Grid.Row="2" Width="450" Height="30" Placeholder="Transaktionsart z.b: Zinsen/Miete/Verkauf etc." x:Name="TransactionType" Foreground="Black" TextChanged="TransactionType_TextChanged"/>
+        <userControls:ClearableTextBox Grid.Row="3" Width="450" Height="30" Placeholder="Transaktionsdatum" x:Name="TransactionDate"/>
+        <userControls:ClearableTextBox Grid.Row="4" Width="450" Height="30" Placeholder="Kategorie z.b IT(Informationstechnik)" x:Name="Category" />
         <userControls:ClearableTextBox Grid.Row="5" Width="450" Height="30" Placeholder="Beschreibung der Einnahme (max 150 Zeichen)" x:Name="Description" />
-        <userControls:ClearableTextBox Grid.Row="6" Width="450" Height="30" Placeholder="Bezahlmethode z.b: Visa/MasterCard " x:Name="PaymentMethod" />
+        <userControls:ClearableTextBox Grid.Row="6" Width="450" Height="30" Placeholder="Bezahlmethode z.b: Visa/MasterCard/PayPal etc. " x:Name="PaymentMethod" />
 
         <Button Content="Hinzufügen" x:Name="insertIntoDB_btn"  Grid.Row="8"  Width="100" Height="30" Click="insertIntoDB_btn_Click" />
         <Button Content="Schließen" x:Name="close_btn"  Grid.Row="8"  Width="100" Height="30" Click="close_btn_Click" Margin="350,0,0,0"/>

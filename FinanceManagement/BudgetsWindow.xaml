@@ -68,7 +68,7 @@
                         <DataGridTextColumn Header="Währung" Binding="{Binding Currency}" x:Name="Currency"/>
                         <DataGridTextColumn Header="Geltungsjahr" Binding="{Binding Budget_Limit_Year}" x:Name="Budget_Limit_Year"/>
                         <DataGridTextColumn Header="Kategorie" Binding="{Binding Budget_Category}" x:Name="Budget_Category"/>
-                        <DataGridTextColumn Header="Erstellt am" Binding="{Binding Creation_Date}" x:Name="Creation_Date"/>
+                        <DataGridTextColumn Header="Erstellt am" Binding="{Binding Creation_Date, StringFormat=\{0:dd.MM.yyyy\}}" x:Name="Creation_Date" />
                         <DataGridTextColumn Header="Status" Binding="{Binding Budget_Status}" x:Name="Budget_Status"/>
                         <DataGridTextColumn Header="Genehmigt von" Binding="{Binding Approved_By}" x:Name="Approved_By"/>
                         <DataGridTextColumn Header="Kommentar" Binding="{Binding Comment}" x:Name="Comment"/>

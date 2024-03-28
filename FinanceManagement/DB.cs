@@ -19,99 +19,8 @@ namespace FinanceManagement
         public event EventHandler? RecordRemoved;
 
 
-
-        /*
-        public void ReadData(DataGrid budgetsDataGrid, Action<int> onLoadedCallback)
-        {
-
-            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
-            List<BudgetLimit> budgetLimits = new List<BudgetLimit>();
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-                using (SqlCommand cmd = new SqlCommand("Select * from BudgetLimits", con))
-                {
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        var budgetLimit = new BudgetLimit()
-                        {
-                            BudgetID = reader["BudgetID"] as int?,
-                            Budget_Amount = reader["Budget_Amount"] as int?,
-                            Budget_Limit_Year = reader["Budget_Limit_Year"] as int?,
-                            Budget_Category = reader["Budget_Category"] as string,
-                            Creation_Date = reader["Creation_Date"] != DBNull.Value ? DateOnly.FromDateTime((DateTime)reader["Creation_Date"]) : (DateOnly?)null,
-                            Budget_Status = reader["Budget_Status"] as string,
-                            Approved_By = reader["Approved_By"] as string,
-                            Comment = reader["Comment"] as string,
-                            Currency = reader["Currency"] as string
-
-                        };
-                        budgetLimits.Add(budgetLimit);
-                        DataUpdated?.Invoke();
-                    }
-                    reader.Close();
-                }
-            }
-            // Aktualisiere das DataGrid im UI-Thread
-            budgetsDataGrid.Dispatcher.Invoke(() =>
-            {
-
-                budgetsDataGrid.ItemsSource = budgetLimits;
-                onLoadedCallback?.Invoke(budgetLimits.Count);
-            });
-        }
-        */
-        //todo methode anpassen um diese dynamisch zu gestalten das sie mehrfach verändert werden kann
-        // um andere tabellen zu verwenden mit einer methode
-        /*
-        public List<BudgetLimit> ReadData()
-        {
-            List<BudgetLimit> results = new List<BudgetLimit>();
-            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
-
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    con.Open();
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM BudgetLimits", con))
-                    {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                var budgetLimit = new BudgetLimit()
-                                {
-                                    BudgetID = reader["BudgetID"] as int?,
-                                    Budget_Amount = reader["Budget_Amount"] as int?,
-                                    Budget_Limit_Year = reader["Budget_Limit_Year"] as int?,
-                                    Budget_Category = reader["Budget_Category"] as string,
-                                    Creation_Date = reader["Creation_Date"] != DBNull.Value ? DateOnly.FromDateTime((DateTime)reader["Creation_Date"]) : (DateOnly?)null,
-                                    Budget_Status = reader["Budget_Status"] as string,
-                                    Approved_By = reader["Approved_By"] as string,
-                                    Comment = reader["Comment"] as string,
-                                    Currency = reader["Currency"] as string
-                                };
-                                results.Add(budgetLimit);
-                            }
-                        }
-                    }
-                }
-
-                catch (SqlException)
-                {
-
-                    MessageBox.Show($"Ein Fehler ist aufgetreten beim Zugriff auf die Datenbank");
-                }
-                return results;
-            }
-
-
-        }
-        */
-
         //for the datagrid Budget get Updatedated, Important
+        /*
         public void ReadData(DataGrid budgetsDataGrid)
         {
 
@@ -161,13 +70,58 @@ namespace FinanceManagement
 
                 budgetsDataGrid.ItemsSource = budgetLimits;
             });
-        }
+        }*/
+
 
         /*---------------------
         START OF GENERIC DB METHODS 
 
          ---------------------*/
+        //for datagrid
+        public void ReadData<T>(DataGrid dataGrid) where T : class, new()
+        {
+            connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
+            List<T> items = new List<T>();
 
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    con.Open();
+                    string tableName = typeof(T).Name;
+
+                    using (SqlCommand cmd = new SqlCommand($"select * from {tableName}", con))
+                    {
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            T item = new T();
+
+                            foreach (var property in typeof(T).GetProperties())
+                            {
+                                if (reader[property.Name] != null)
+                                {
+                                    property.SetValue(item, reader[property.Name]);
+                                }
+                            }
+                            items.Add(item);
+                        }
+                        reader.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ein Fehler ist aufgetreten beim Zugriff auf die Datenbank: {ex.Message}");
+                }
+            }
+
+            dataGrid.Dispatcher.Invoke(() =>
+            {
+                dataGrid.ItemsSource = items;
+            });
+        }
+
+        //for table values from the database
         public List<T> ReadData<T>(string tableName) where T : new()
         {
             var results = new List<T>();
@@ -265,9 +219,19 @@ namespace FinanceManagement
                         object value = prop?.GetValue(item) ?? DBNull.Value;
                         if (value == null || value == DBNull.Value)
                         {
+                            DateTime? dateValue = null;
                             if (IsDateColumn(tableName, col))
                             {
-                                cmd.Parameters.AddWithValue($"@{col}", DateTime.Now);
+                                DateTime? dateOnlyValue = (DateTime)prop.GetValue(item);
+                                if (dateOnlyValue.HasValue)
+                                {
+                                    dateValue = new DateTime(dateOnlyValue.Value.Year, dateOnlyValue.Value.Month, dateOnlyValue.Value.Day);
+                                }
+                                else
+                                {
+                                    dateValue = DateTime.Now.Date; // Aktuelles Datum ohne Uhrzeit
+                                }
+                                cmd.Parameters.AddWithValue($"@{col}", dateValue);
                             }
                             else
                             {
@@ -291,6 +255,7 @@ namespace FinanceManagement
         public void UpdateData<T>(string tableName, T item) where T : class
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
+
             try
             {
                 using (SqlConnection con = new SqlConnection(connectionString))
@@ -412,6 +377,7 @@ namespace FinanceManagement
         // Hilfsmethode zum Überprüfen, ob eine Spalte ein Datumsfeld ist
         private bool IsDateColumn(string tableName, string columnName)
         {
+            string connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
             // Gibt den datentypen innerhalb der Tabelle und spalte aus
             string query = $"SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}' AND COLUMN_NAME = '{columnName}'";
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -589,6 +555,6 @@ namespace FinanceManagement
                 }
             }
         }
-       
+
     }
 }

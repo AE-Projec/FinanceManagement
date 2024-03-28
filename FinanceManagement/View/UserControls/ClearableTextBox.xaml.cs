@@ -60,7 +60,15 @@ namespace FinanceManagement.View.UserControls
             }
             set 
             { 
-                txtInput.Text = value;
+                if(DateTime.TryParse(value, out DateTime dateValue)) 
+                {
+                    txtInput.Text = dateValue.ToString("dd.MM.yyyy");
+                }
+                else
+                {
+                    txtInput.Text = value;
+                }
+                
             }
         }
 
