@@ -87,22 +87,46 @@ namespace FinanceManagement
         private void Button_Delete_Revenue_Click(object sender, RoutedEventArgs e)
         {
 
-            DeleteRevenueWindow deleteRevenueWindow = new DeleteRevenueWindow();
-            var deleteBudget = new DeleteBudgetWindow();
+            //DeleteRevenueWindow deleteRevenueWindow = new DeleteRevenueWindow();
+            var deleteRevenue = new DeleteRevenueWindow();
             var row = sender as DataGridRow;
 
-            deleteBudget.DataDeleted += (sender, e) =>
-             {
-                 RefreshDataGrid();
-             };
+           
 
             var blurEffect = new System.Windows.Media.Effects.BlurEffect();
             blurEffect.Radius = 5;
             Effect = blurEffect;
-            deleteRevenueWindow.Owner = this;
+            deleteRevenue.Owner = this;
+            deleteRevenue.PrevRevenue += DeleteRevenue_PrevRevenue;
+            deleteRevenue.NextRevenue += DeleteRevenue_NextRevenue;
             RevenuesDataGrid.SelectedIndex = 0;
-            deleteRevenueWindow.ShowDialog();
+            deleteRevenue.DataDeleted += (sender, e) =>
+            {
+                RefreshDataGrid();
+            };
+            deleteRevenue.ShowDialog();
             Effect = null;
+        }
+
+        private void DeleteRevenue_NextRevenue(DeleteRevenueWindow deleteRevenue)
+        {
+            if (RevenuesDataGrid.SelectedIndex + 1 < RevenuesDataGrid.Items.Count - 1)
+            {
+                RevenuesDataGrid.SelectedIndex += 1;
+            }
+            var revenue = RevenuesDataGrid.SelectedItem as Revenue;
+            deleteRevenue.ShowRevenues(revenue);
+        }
+
+        private void DeleteRevenue_PrevRevenue(DeleteRevenueWindow deleteRevenue)
+        {
+            if (RevenuesDataGrid.SelectedIndex > 0)
+            {
+                RevenuesDataGrid.SelectedIndex -= 1;
+
+            }
+            var revenue = RevenuesDataGrid.SelectedItem as Revenue;
+            deleteRevenue.ShowRevenues(revenue);
         }
 
         private void updateRevenueBtn_Click(object sender, RoutedEventArgs e)
@@ -191,7 +215,7 @@ namespace FinanceManagement
 
         private void EditRevenue_PrevRevenue(UpdateRevenueWindow revenues)
         {
-            if (RevenuesDataGrid.SelectedIndex > 0)
+            if (RevenuesDataGrid.SelectedIndex > 0 )
             {
                 RevenuesDataGrid.SelectedIndex -= 1;
 

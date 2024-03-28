@@ -21,9 +21,8 @@ namespace FinanceManagement
     public partial class DeleteBudgetWindow : Window
     {
         DB db = new DB();
-       // public event EventHandler DataUpdated;
         public event EventHandler DataDeleted;
-        NewBudgetWindow budgetWindow = new NewBudgetWindow();
+        //NewBudgetWindow budgetWindow = new NewBudgetWindow();
 
         public event Action<DeleteBudgetWindow> NextBudget;
         public event Action<DeleteBudgetWindow> PrevBudget;
@@ -35,8 +34,6 @@ namespace FinanceManagement
             InitializeComponent();
             LoadFirstBudgetEntry();
             db.RecordRemoved += Db_RecordRemoved;
-            
-
 
         }
 

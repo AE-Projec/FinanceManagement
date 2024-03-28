@@ -25,5 +25,10 @@ namespace FinanceManagement
             InitializeComponent();
             
         }
+
+        private void addNew_Expenditure_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

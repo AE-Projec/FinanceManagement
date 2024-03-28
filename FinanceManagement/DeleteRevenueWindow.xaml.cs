@@ -22,14 +22,51 @@ namespace FinanceManagement
     public partial class DeleteRevenueWindow : Window
     {
         DB dB = new DB();
+
+        public event EventHandler DataDeleted;
+
+        public event Action<DeleteRevenueWindow> NextRevenue;
+        public event Action<DeleteRevenueWindow> PrevRevenue;
+
+        public Revenue revenue {  get; set; }
         public DeleteRevenueWindow()
         {
             InitializeComponent();
             loadFirstRevenueEntry();
+            dB.RecordRemoved += DB_RecordRemoved;
         }
 
+        private void DB_RecordRemoved(object? sender, EventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                dB.ReadData<Revenue>("Revenue");
+            });
+        }
+
+        public void ShowRevenues(Revenue revenues)
+        {
+            revenue = revenues;
+            RevenueID.Text = $"{revenue.RevenueID}";
+            TransactionType.Text = $"{revenue.TransactionType}";
+            Amount.Text = $"{revenue.Amount}";
+            Currency.Text = $"{revenue.Currency.Trim()}";
+            TransactionDate.Text = $"{revenue.TransactionDate}";
+            Category.Text = $"{revenue.Category}";
+            Description.Text = $"{revenue.Description}";
+            PaymentMethod.Text = $"{revenue.PaymentMethod}";
+            Show();
+        }
+
+        public int LastDeletedId { get; private set; }
         private void deleteEntry_btn_Click(object sender, RoutedEventArgs e)
         {
+            int revenueId = Convert.ToInt32(RevenueID.Text);
+            dB.DeleteData<Revenue>("Revenue", "RevenueID", revenueId);
+            LastDeletedId = revenueId;
+
+            DataDeleted?.Invoke(this, EventArgs.Empty);
+            MessageBox.Show($"Datensatz {revenueId} erfolgreich aus der Datenbank entfernt.");
 
         }
 
@@ -40,12 +77,13 @@ namespace FinanceManagement
 
         private void previousEntry_btn_Click(object sender, RoutedEventArgs e)
         {
-
+            PrevRevenue.Invoke(this);
         }
 
         private void nextEntry_btn_Click(object sender, RoutedEventArgs e)
         {
             
+            NextRevenue.Invoke(this);
         }
 
         private void loadFirstRevenueEntry()

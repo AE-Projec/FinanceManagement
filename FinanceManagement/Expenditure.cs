@@ -11,7 +11,7 @@ namespace FinanceManagement
         public int? ExpenditureID { get; set; }
         public string? TransactionType { get; set; }
         public decimal? Amount { get; set; }
-        public DateOnly? TransactionDate {  get; set; }
+        public DateTime? TransactionDate {  get; set; }
         public string? Category { get; set; }
         public string? TransactionDescription { get; set; }
         public string? PaymentMethod { get; set; }
